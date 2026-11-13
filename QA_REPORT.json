@@ -4,11 +4,11 @@
   "status": "published-static-demo-representative-checks-passed",
   "staticAudit": {
     "ok": true,
-    "files": 146,
-    "literalModuleImports": 233,
+    "files": 147,
+    "literalModuleImports": 236,
     "resolvedLocalModuleEdges": 227,
     "findings": [],
-    "gitMetadataPresent": false
+    "gitMetadataPresent": true
   },
   "syntheticFixture": {
     "passed": 187,
@@ -26,7 +26,7 @@
     "runtime": "Existing Node24 runtime; no packages installed"
   },
   "browserAcceptance": {
-    "status": "Local Chrome representative checks passed; IAB resize/capture cause unresolved.",
+    "status": "Representative Chrome checks and follow-up IAB320/390viewport checks passed; real phone acceptance not performed.",
     "chrome": [
       "Synthetic seat SYN-R3/6 selection, section and full3D mode switching, page reload, one active and one disabled generic venue.",
       "Final candidate: synthetic photo projection with aspect/focal locks; requested390x844→1440x900→full-page capture→viewport reset preserved stage and overlay without a black frame.",
@@ -39,7 +39,8 @@
       "Camera keyboard increment35→36 updates both number and range controls.",
       "Browser note saved, restored after reload, then deleted through the UI; no server writes.",
       "Theatre picker has one enabled synthetic theatre and one disabled generic record.",
-      "Requested390px mobile viewport showed375px document width, no horizontal overflow; photo controls accessible."
+      "Requested390px mobile viewport showed375px document width, no horizontal overflow; photo controls accessible.",
+      "Follow-up320/390viewport checks: compact header, full initials labels, photo focal preset locks, lock/unlock50mm sequence and view switching passed; see followupMobileInteraction for actual CSS dimensions."
     ],
     "consoleErrorsObserved": 0,
     "limitations": [
@@ -94,6 +95,68 @@
       "app and personal workspace: authored sample photo and functional browser-only notes"
     ],
     "portedFix": "Six native-fetch receiver calls in five inactive compatibility modules aligned; service activation remains disabled.",
-    "localPhotoDeleteUI": "bindLocalPhotoControls matches operating v5; inline confirmation, context checks and cancel handling. Only browser IndexedDB copy is affected."
+    "localPhotoDeleteUI": "bindLocalPhotoControls matches operating v5; inline confirmation, context checks and cancel handling. Only browser IndexedDB copy is affected.",
+    "publicInterfaceFixes": "Camera and sight preset locks now follow the effective photo focal; compact mobile header and wider initials rail preserve all controls."
+  },
+  "followupMobileInteraction": {
+    "status": "local-regression-and-iab-browser-checks-passed-deployment-verification-pending",
+    "photoFocalLock": {
+      "passed": 9,
+      "failed": 0,
+      "scope": "Actual UI handler and preset synchronization source evaluated with DOM test doubles; no real browser or storage."
+    },
+    "syntax": {
+      "file": "src/app.js",
+      "passed": true
+    },
+    "layoutChanges": [
+      "Two-row small-screen header and reduced toolbar spacing; controls retained.",
+      "Directory initials rail widened from34px to48px with vertical scrolling."
+    ],
+    "pending": [
+      "Publication commit and deployed file parity."
+    ],
+    "realPhoneTested": false,
+    "browser": {
+      "environment": "IAB browser viewport emulation, not an actual phone",
+      "viewports": [
+        {
+          "requestedWidth": 390,
+          "cssWidth": 375,
+          "bodyClientEqualsScroll": true,
+          "headerHeightPxBefore": 155.734,
+          "headerHeightPxAfter": 103,
+          "canvasTopPxBefore": 578.531,
+          "canvasTopPxAfter": 493.797,
+          "canvasHeightPx": 330
+        },
+        {
+          "requestedWidth": 320,
+          "cssWidth": 305,
+          "bodyClientEqualsScroll": true,
+          "headerHeightPxAfter": 103,
+          "canvasTopPxAfter": 510.797
+        }
+      ],
+      "initialsRail": {
+        "outerWidthPx": 48,
+        "clientWidthPx": 33,
+        "scrollWidthPx": 33,
+        "buttonWidthPx": 33,
+        "buttonHeightPx": 42,
+        "labelsFullyVisible": true
+      },
+      "photoLock": [
+        "Projected photo with aspect and35mm locks: all9presets disabled, none falsely selected, number and range35disabled, canvas description35mm.",
+        "Unlock retains35mm; selecting50mm applies50mm; locking the photo again returns35mm and disables presets."
+      ],
+      "otherChecks": [
+        "Section and full3D switching succeeded.",
+        "Restored seat view, capture off,24mm, photo locks off and projection off."
+      ],
+      "consoleErrors": 0,
+      "blackViewportReproduced": false,
+      "captureLimit": "No black frame reproduced in this viewport check; the earlier full-page capture root cause remains unconfirmed."
+    }
   }
 }

@@ -336,9 +336,9 @@ body.personal-app .site-header { max-width:1920px; margin-inline:auto; padding-i
   .personal-surface-tools { padding:0 12px 12px;gap:8px; }.personal-surface-tools button { min-height:42px; }
   .personal-aim-actions { width:100%;margin:0; }.personal-aim-actions button { flex:1; }
   .directory-results { display:flex;flex-direction:column;gap:8px; }.directory-item { grid-template-columns:minmax(0,1fr) auto; }.directory-item small { grid-column:1; }.directory-item button { grid-column:2;grid-row:1/3;align-self:center; }
-  .theater-directory[open] { display:grid;grid-template-columns:34px minmax(0,1fr);column-gap:10px; }
+  .theater-directory[open] { display:grid;grid-template-columns:48px minmax(0,1fr);column-gap:10px; }
   .theater-directory>.dialog-heading,.theater-directory>label,.theater-directory>.directory-pagination,.theater-directory>#directory-status,.theater-directory>.directory-info { grid-column:1/-1; }
-  .theater-directory .directory-initials { grid-column:1;grid-row:3;display:flex;flex-direction:column;flex-wrap:nowrap;align-self:start;max-height:65dvh;overflow:auto;position:sticky;top:0; }
+  .theater-directory .directory-initials { grid-column:1;grid-row:3;display:flex;flex-direction:column;flex-wrap:nowrap;align-self:start;max-height:65dvh;overflow-x:hidden;overflow-y:auto;position:sticky;top:0; }
   .theater-directory .directory-results { grid-column:2;grid-row:3; }
   .workspace-dialog { padding:16px;max-height:92dvh; }.workspace-dialog button { min-height:42px; }#op-seat-canvas { height:230px; }
 }
@@ -827,10 +827,23 @@ body.personal-app { --control-line:#c5c9d0; --line:#e2e5e9; --hover:#f0f1f4; }
   .personal-app .site-header .header-actions { grid-column:2;grid-row:1; }
 }
 @media(max-width:480px) {
-  .personal-app .site-header { grid-template-columns:minmax(0,1fr);gap:8px; }
-  .personal-app .site-header .header-actions { grid-column:1;grid-row:3;justify-self:stretch; }
-  .personal-app .site-header .theater-picker { grid-column:1;grid-row:2; }
-  .personal-app main { padding-top:12px; }
+  .personal-app .site-header { grid-template-columns:minmax(0,1fr) auto;gap:6px 8px;padding-block:8px; }
+  .personal-app .site-header .brand { gap:6px;font-size:18px;letter-spacing:-.6px; }
+  .personal-app .site-header .brand-mark { width:20px;height:23px;gap:3px; }
+  .personal-app .site-header .brand-mark i { width:5px; }
+  .personal-app .personal-brand-copy { gap:2px; }
+  .personal-app .personal-brand-copy #page-title { font-size:10px;white-space:nowrap; }
+  .personal-app .site-header .header-actions { grid-column:2;grid-row:1;justify-self:end; }
+  .personal-app .personal-header-actions { gap:4px; }
+  .personal-app .personal-header-actions button { min-height:40px;padding:6px;font-size:11px; }
+  .personal-app .site-header .theater-picker { grid-column:1/-1;grid-row:2;gap:6px; }
+  .personal-app main { padding-top:8px; }
+  .personal-app .mobile-workspace-pages { margin-bottom:8px; }
+  .personal-app .view-heading { padding:10px 12px 8px; }
+  .personal-app .personal-surface-tools { gap:6px;padding:0 10px 8px; }
+  .personal-app .personal-surface-tools button { min-height:42px;padding:6px 9px;font-size:11px; }
+  .personal-app .personal-surface-tools>.personal-aim-actions { gap:6px; }
+  .personal-app .mobile-capture-controls { padding:8px 12px; }
 }
 
 /* /admin is a presentation route, never an authorization boundary. */

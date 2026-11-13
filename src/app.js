@@ -374,6 +374,7 @@ const photoFocalTarget = (value, source = 'auto') => {
   return !state.sightViewEnabled && value >= range.minMm && value <= range.maxMm ? 'camera' : null;
 };
 const isAllowedPhotoFocal = (value) => photoFocalTarget(value) !== null;
+const photoFocalLocked = () => Boolean(state.stagePhotoId && Number.isFinite(state.lockedPhotoFocalMm));
 const activeFocalLength = () => state.stagePhotoId && Number.isFinite(state.lockedPhotoFocalMm) ? state.lockedPhotoFocalMm : state.sightViewEnabled ? state.sightFocalLength35Mm : state.focalLength35Mm;
 const activeAspectRatio = () => state.stagePhotoId && state.lockedPhotoAspect || (state.sightViewEnabled ? 16 / 9 : aspectRatio());
 const getAudience = () => authoredAudienceDirections(getEffectiveAudience(audienceLayout).filter(person => person.seat?.row !== state.seat.row || person.seat?.number !== state.seat.number),geometry);
@@ -501,13 +502,27 @@ function syncLensControls() {
     $(id).min = String(controlRange.minMm); $(id).max = String(controlRange.maxMm); $(id).step = '1';
     $(id).disabled = state.sightViewEnabled || controlRange.isFixed;
   }
-  for (const button of document.querySelectorAll('[data-focal-preset]')) {
-    const focal = Number(button.dataset.focalPreset);
-    button.disabled = state.sightViewEnabled || focal < range.minMm || focal > range.maxMm;
-    button.title = focal < range.minMm || focal > range.maxMm ? '현재 렌즈의 환산 범위 밖입니다.' : '';
-  }
+  syncFocalPresets();
   syncLensStorageNote();
   syncLensReadout();
+}
+
+function syncFocalPresets() {
+  const locked = photoFocalLocked(), range = cameraFocalRange();
+  const cameraFocal = locked && !state.sightViewEnabled ? state.lockedPhotoFocalMm : state.focalLength35Mm;
+  const sightFocal = locked && state.sightViewEnabled ? state.lockedPhotoFocalMm : state.sightFocalLength35Mm;
+  for (const button of document.querySelectorAll('[data-focal-preset]')) {
+    const focal = Number(button.dataset.focalPreset), outside = focal < range.minMm || focal > range.maxMm;
+    const active = focal === cameraFocal;
+    button.disabled = state.sightViewEnabled || locked || outside;
+    button.title = locked ? '사진 환산 mm 고정을 해제하면 초점거리를 바꿀 수 있습니다.' : outside ? '현재 렌즈의 환산 범위 밖입니다.' : '';
+    button.classList.toggle('active', active); button.setAttribute('aria-pressed', String(active));
+  }
+  for (const button of document.querySelectorAll('[data-sight-focal-preset]')) {
+    const active = Number(button.dataset.sightFocalPreset) === sightFocal;
+    button.disabled = !state.sightViewEnabled || locked;
+    button.classList.toggle('active', active); button.setAttribute('aria-pressed', String(active));
+  }
 }
 
 function fillFavoriteEditor(lens = null, asNew = false) {
@@ -1078,10 +1093,6 @@ function syncControls() {
   const sightFocal = state.sightViewEnabled && state.stagePhotoId && Number.isFinite(state.lockedPhotoFocalMm) ? state.lockedPhotoFocalMm : state.sightFocalLength35Mm;
   $('sight-focal-number').value = String(focalControlMm(sightFocal));
   $('sight-focal-range').value = String(focalControlMm(sightFocal));
-  for (const button of document.querySelectorAll('[data-sight-focal-preset]')) {
-    const active = Number(button.dataset.sightFocalPreset) === state.sightFocalLength35Mm;
-    button.classList.toggle('active', active); button.setAttribute('aria-pressed', String(active));
-  }
   syncPhotoFocalAction(photoManager.getSnapshot().selected);
   syncCameraHeightControls();
   $('aim-framing').value = state.aimFraming;
@@ -1205,11 +1216,7 @@ function renderLayoutStatus() {
   $('structure-count').textContent = layout ? `${layout.structures.length}개 / 최대 20개` : '모델 준비 중';
   const outside = layout?.structures.filter(structure => !isStructureWithinStage(geometry,structure)) || [];
   $('layout-status').textContent = outside.length ? `${outside.map(s=>s.name).join(', ')}의 외곽이 무대 경계를 넘습니다. 크기 또는 위치를 조절해 주세요.` : layout ? '위치·체형·구조물은 모델 가정' : '모델을 준비하고 있습니다.';
-  for (const button of document.querySelectorAll('[data-focal-preset]')) {
-    const active = Number(button.dataset.focalPreset) === state.focalLength35Mm;
-    button.classList.toggle('active', active);
-    button.setAttribute('aria-pressed', String(active));
-  }
+  syncFocalPresets();
 }
 
 function selectedEditorItem() {
@@ -1478,7 +1485,7 @@ function bindLayoutControls() {
     });
     input.addEventListener('change', () => { syncLayoutControls(); scheduleRender(); });
   }
-  document.querySelector('.camera-focal-presets').addEventListener('click', event => { const button = event.target.closest('[data-focal-preset]'); if (!button || button.disabled) return; state.focalLength35Mm = normalizeFocalLength(button.dataset.focalPreset); syncControls(); scheduleRender(); });
+  document.querySelector('.camera-focal-presets').addEventListener('click', event => { const button = event.target.closest('[data-focal-preset]'); if (!button || button.disabled || photoFocalLocked()) return; state.focalLength35Mm = normalizeFocalLength(button.dataset.focalPreset); syncControls(); scheduleRender(); });
 }
 
 function bindControls() {
@@ -1573,7 +1580,7 @@ function bindControls() {
     $(id).addEventListener('input', event => { if (event.target.value === '') return; state.sightFocalLength35Mm = normalizeSightFocalLength(event.target.value); $(id === 'sight-focal-range' ? 'sight-focal-number' : 'sight-focal-range').value = String(state.sightFocalLength35Mm); scheduleRender(); });
     $(id).addEventListener('change', syncControls);
   }
-  for (const button of document.querySelectorAll('[data-sight-focal-preset]')) button.addEventListener('click', () => { state.sightFocalLength35Mm = normalizeSightFocalLength(button.dataset.sightFocalPreset); syncControls(); scheduleRender(); });
+  for (const button of document.querySelectorAll('[data-sight-focal-preset]')) button.addEventListener('click', () => { if (button.disabled || !state.sightViewEnabled || photoFocalLocked()) return; state.sightFocalLength35Mm = normalizeSightFocalLength(button.dataset.sightFocalPreset); syncControls(); scheduleRender(); });
   $('show-model-view').addEventListener('click', clearPhotoProjection);
   $('stage-photo-opacity').addEventListener('input', event => { state.photoOpacity = Math.round(clamp(finite(event.target.value, 50),0,100)); syncStagePhotoPreview(); });
   $('seat-row').addEventListener('change', (event) => { catalogUI?.clearProjection(); setComparisonSeat({row:Number(event.target.value),number:state.seat.number}); scheduleRender(); });
