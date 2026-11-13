@@ -1,7 +1,7 @@
 {
   "schema": "td-portfolio-qa/v1",
   "preparedOn": "2026-11-13",
-  "status": "published-static-demo-verified-with-file-roundtrip-and-test-cleanup-pending",
+  "status": "published-static-demo-browser-file-roundtrip-verified-real-phone-and-full-reset-untested",
   "staticAudit": {
     "ok": true,
     "files": 147,
@@ -26,7 +26,7 @@
     "runtime": "Existing Node24 runtime; no packages installed"
   },
   "browserAcceptance": {
-    "status": "Representative Chrome and IAB viewport checks passed within their recorded scope; browser file round trip and temporary test-layout cleanup remain incomplete.",
+    "status": "Representative Chrome and IAB viewport checks, Chrome fixture-file import, IAB actual downloaded-file round trip and individual test-layout cleanup passed; full reset and real-phone acceptance untested.",
     "chrome": [
       "Synthetic seat SYN-R3/6 selection, section and full3D mode switching, page reload, one active and one disabled generic venue.",
       "Final candidate: synthetic photo projection with aspect/focal locks; requested390x844→1440x900→full-page capture→viewport reset preserved stage and overlay without a black frame.",
@@ -166,8 +166,8 @@
     }
   },
   "followupLayoutInteraction": {
-    "scope": "Representative Chrome UI checks and a separate in-memory module fixture suite; no full browser file round trip claimed.",
-    "status": "browser-save-load-passed-file-roundtrip-and-test-cleanup-pending",
+    "scope": "Chrome UI save/load and fixture-file import, IAB actual downloaded-file round trip, direct reading and full-state comparison of that downloaded artifact, and a separate synthetic-fixture module suite.",
+    "status": "browser-save-load-import-roundtrip-and-individual-test-cleanup-passed",
     "chrome": {
       "layoutSaveLoad": {
         "passed": true,
@@ -200,17 +200,46 @@
       "jsonExport": {
         "successMessageObserved": true,
         "downloadEventConfirmed": false,
-        "downloadArtifactContentsVerified": false,
-        "limitation": "Download tracking timed out and the operating system denied download-folder access."
+        "limitation": "Chrome download-event tracking timed out. Directory listing was denied by the operating system; the exact IAB-returned download artifact was subsequently readable and verified separately.",
+        "artifactContentVerification": "The actual IAB download was read and verified under iabDownloadedFileRoundTrip; no Chrome download artifact was obtained."
       },
       "fileImportUI": {
-        "completed": false,
-        "limitation": "Browser-native confirmation interaction did not complete, so the file-picker import scenario was not finished."
+        "completed": true,
+        "validFixture": {
+          "accepted": true,
+          "loaded": true,
+          "seat": {
+            "row": 2,
+            "number": 3
+          },
+          "peopleCount": 2,
+          "structureCount": 1,
+          "structure": {
+            "widthCm": 180,
+            "depthCm": 80,
+            "heightCm": 90,
+            "rotationDeg": 15
+          }
+        },
+        "corruptFixture": {
+          "rejected": true,
+          "errorMessageObserved": true,
+          "existingLayoutsUnchanged": true,
+          "preservedLayoutCount": 3
+        },
+        "scope": "File chooser selected a prepared synthetic fixture; this was not a file downloaded by Chrome in this test."
       },
       "testCleanup": {
-        "completed": false,
-        "remaining": "Temporary browser-only test layouts from this run.",
-        "limitation": "Browser-native confirmation interaction did not complete.",
+        "completed": true,
+        "method": "Load layout A, delete each of the three test layouts individually, then reload.",
+        "savedListEmptyAfterReload": true,
+        "defaultSceneAfterReload": {
+          "peopleCount": 2,
+          "structureCount": 2,
+          "audienceCount": 17
+        },
+        "consoleErrorsObserved": 0,
+        "fullResetTested": false,
         "serverDataWritten": false
       }
     },
@@ -243,6 +272,51 @@
       "layoutImport": "One layout JSON, at most 256 KiB, is added to the saved list; the user then chooses Load to apply it. Original photos are not included.",
       "personalDataArchive": "Export-only archive of saved layouts, personal notes and lens settings. No full-archive restore UI; photographs and login data excluded."
     },
-    "productCodeChangedForThisReview": false
+    "productCodeChangedForThisReview": false,
+    "iabDownloadedFileRoundTrip": {
+      "passed": true,
+      "environment": "In-app browser, not a physical phone.",
+      "downloadEventConfirmed": true,
+      "sameReturnedFileSelectedForImport": true,
+      "newPresetIdentifierAllocated": true,
+      "loadCompleted": true,
+      "restoredState": {
+        "focalLengthMm": 13,
+        "peopleCount": 2,
+        "structureCount": 2,
+        "audienceCount": 17
+      },
+      "wholeFileBytesIndependentlyRead": true,
+      "testCleanup": {
+        "completed": true,
+        "method": "Delete both round-trip test layouts individually and reload.",
+        "savedListEmptyAfterReload": true,
+        "consoleErrorsObserved": 0,
+        "fullResetTested": false,
+        "serverDataWritten": false
+      },
+      "downloadedArtifactValidation": {
+        "status": "passed",
+        "bytes": 5636,
+        "sha256": "e170cd1c31e4da8d657269dfb2df8c94e5fb91411e9f65497f683a81023f2367",
+        "schemaVersion": 3,
+        "checksPassed": 15,
+        "checksFailed": 0,
+        "scope": "The actual downloaded JSON was read directly, imported and loaded with the public storage module in memory. This complements the observed browser file-import/apply round trip.",
+        "entireStateDeepEqual": true,
+        "syntheticVenueVerified": true,
+        "prepareForApplyPassed": true,
+        "peopleCount": 2,
+        "structureCount": 2,
+        "focalLengthMm": 13,
+        "equalityBasis": "Complete state deep equality. New preset identifiers and timestamps are intentional import changes, so byte-identical files before and after import are not claimed."
+      }
+    },
+    "remainingLimitations": [
+      "Chrome download-event tracking timed out and was not repeatedly retried. The actual downloaded-file round-trip result belongs to IAB only.",
+      "Import creates a new preset identifier and timestamps. Verification compares the complete restored state rather than asserting byte identity of pre-import and post-import files.",
+      "Full reset was not tested. Individual deletion and empty-list recovery after reload were verified.",
+      "No physical-phone acceptance test was performed."
+    ]
   }
 }
