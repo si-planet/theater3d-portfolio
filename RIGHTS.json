@@ -43,5 +43,11 @@
     "browserStorage": "Explicit browser preservation only; delete removes the selected browser copy after an in-page confirmation.",
     "sourceFileDeletion": false,
     "inMemoryImageAfterStoredCopyDeletion": "Retained until removed from the current list or the page is closed; other photos are not removed."
+  },
+  "interactionUpdate": {
+    "scope": "Photo focal-lock presets and responsive header/directory presentation only.",
+    "newExternalAssets": false,
+    "serverAccessAdded": false,
+    "personalDataIncluded": false
   }
 }

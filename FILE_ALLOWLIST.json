@@ -145,6 +145,7 @@
     "src/workspace-ui.js",
     "styles.css",
     "tests/audit-safe-export.py",
+    "tests/photo-focal-lock.mjs",
     "tests/portfolio-boundaries.mjs",
     "tests/synthetic-fixture.mjs"
   ]
