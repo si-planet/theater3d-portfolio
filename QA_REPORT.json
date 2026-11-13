@@ -1,7 +1,7 @@
 {
   "schema": "td-portfolio-qa/v1",
   "preparedOn": "2026-11-13",
-  "status": "published-static-demo-representative-checks-passed",
+  "status": "published-static-demo-verified-with-file-roundtrip-and-test-cleanup-pending",
   "staticAudit": {
     "ok": true,
     "files": 147,
@@ -26,7 +26,7 @@
     "runtime": "Existing Node24 runtime; no packages installed"
   },
   "browserAcceptance": {
-    "status": "Representative Chrome checks and follow-up IAB320/390viewport checks passed; real phone acceptance not performed.",
+    "status": "Representative Chrome and IAB viewport checks passed within their recorded scope; browser file round trip and temporary test-layout cleanup remain incomplete.",
     "chrome": [
       "Synthetic seat SYN-R3/6 selection, section and full3D mode switching, page reload, one active and one disabled generic venue.",
       "Final candidate: synthetic photo projection with aspect/focal locks; requested390x844→1440x900→full-page capture→viewport reset preserved stage and overlay without a black frame.",
@@ -71,9 +71,11 @@
     "url": "https://si-planet.github.io/theater3d-portfolio/",
     "initialSourceCommit": "215de217fbc75a0b904aa186b95fe3040908ce71",
     "privateHistoryTransferred": false,
-    "remoteFileCount": 146,
-    "deployedFilesHashMatched": 12,
-    "initialPagesRun": "43402889116"
+    "remoteFileCount": 147,
+    "deployedFilesHashMatched": 18,
+    "initialPagesRun": "43402889116",
+    "latestVerifiedSourceCommit": "7a772fb60a60f9734997cbdd1224c976d1665d3b",
+    "latestVerifiedPagesRun": "43428526028"
   },
   "productionComparison": {
     "scope": "Latest reviewed operating frontend snapshot compared on2026-11-13; private datasets and server configuration excluded.",
@@ -99,7 +101,7 @@
     "publicInterfaceFixes": "Camera and sight preset locks now follow the effective photo focal; compact mobile header and wider initials rail preserve all controls."
   },
   "followupMobileInteraction": {
-    "status": "local-regression-and-iab-browser-checks-passed-deployment-verification-pending",
+    "status": "published-deployed-files-matched-and-iab-browser-checks-passed",
     "photoFocalLock": {
       "passed": 9,
       "failed": 0,
@@ -113,9 +115,7 @@
       "Two-row small-screen header and reduced toolbar spacing; controls retained.",
       "Directory initials rail widened from34px to48px with vertical scrolling."
     ],
-    "pending": [
-      "Publication commit and deployed file parity."
-    ],
+    "pending": [],
     "realPhoneTested": false,
     "browser": {
       "environment": "IAB browser viewport emulation, not an actual phone",
@@ -157,6 +157,92 @@
       "consoleErrors": 0,
       "blackViewportReproduced": false,
       "captureLimit": "No black frame reproduced in this viewport check; the earlier full-page capture root cause remains unconfirmed."
+    },
+    "deployment": {
+      "sourceCommit": "7a772fb60a60f9734997cbdd1224c976d1665d3b",
+      "pagesRun": "43428526028",
+      "status": "succeeded",
+      "deployedFilesHashMatched": 18
     }
+  },
+  "followupLayoutInteraction": {
+    "scope": "Representative Chrome UI checks and a separate in-memory module fixture suite; no full browser file round trip claimed.",
+    "status": "browser-save-load-passed-file-roundtrip-and-test-cleanup-pending",
+    "chrome": {
+      "layoutSaveLoad": {
+        "passed": true,
+        "steps": [
+          "Save layout A with 2 people and 2 structures.",
+          "Add a box and save layout B with 3 structures.",
+          "Load A and observe 2 structures.",
+          "Load B and observe 3 structures."
+        ]
+      },
+      "structureWidth": {
+        "passed": true,
+        "inputMethod": "Actual keyboard entry followed by Tab commits the input.",
+        "cases": [
+          {
+            "enteredCm": 4000,
+            "resultCm": 3000
+          },
+          {
+            "enteredCm": 0,
+            "result": "Previous valid value restored."
+          },
+          {
+            "enteredCm": 180,
+            "resultCm": 180
+          }
+        ],
+        "automationObservation": "A fill-only attempt did not dispatch the commit interaction. This was not evidence of an application defect."
+      },
+      "jsonExport": {
+        "successMessageObserved": true,
+        "downloadEventConfirmed": false,
+        "downloadArtifactContentsVerified": false,
+        "limitation": "Download tracking timed out and the operating system denied download-folder access."
+      },
+      "fileImportUI": {
+        "completed": false,
+        "limitation": "Browser-native confirmation interaction did not complete, so the file-picker import scenario was not finished."
+      },
+      "testCleanup": {
+        "completed": false,
+        "remaining": "Temporary browser-only test layouts from this run.",
+        "limitation": "Browser-native confirmation interaction did not complete.",
+        "serverDataWritten": false
+      }
+    },
+    "moduleFixtureValidation": {
+      "passed": 14,
+      "failed": 0,
+      "schemaVersion": 3,
+      "scope": "Actual save, export, import and load modules executed with in-memory storage. The fixture is synthetic and was not a downloaded browser artifact.",
+      "checks": [
+        "Synthetic source only.",
+        "Schema version 3.",
+        "Single preset exported.",
+        "Valid import accepted.",
+        "New identifier allocated.",
+        "Imported state matches.",
+        "Geometry contains people and a structure.",
+        "Selected seat is valid.",
+        "Lens restore is valid.",
+        "Camera chair height is valid.",
+        "Preparation for applying the preset succeeds.",
+        "Corrupt JSON rejected.",
+        "Invalid import preserves existing data.",
+        "No photographs, URLs, accounts or credentials in the fixture."
+      ],
+      "downloadArtifactVerified": false,
+      "browserFilePickerExecuted": false
+    },
+    "storageSemantics": {
+      "reload": "For the current theatre and model, restore the most recently saved preset by updatedAt. Unsaved edits and merely loading another preset do not automatically become the newest saved preset.",
+      "layoutImport": "One layout JSON, at most 256 KiB, is added to the saved list; the user then chooses Load to apply it. Original photos are not included.",
+      "personalDataArchive": "Export-only archive of saved layouts, personal notes and lens settings. No full-archive restore UI; photographs and login data excluded."
+    },
+    "productCodeChangedForThisReview": false
   }
 }
