@@ -15,7 +15,7 @@
     "repository history and prior export proofs"
   ],
   "aiAssistance": "User requirements and review; AI-assisted implementation and verification.",
-  "publication": "Prepared for public publication; public push and Pages deployment are not yet complete.",
+  "publication": "Published as a new public Git history with synthetic files only; GitHub Pages serves the same static demo. No private history transferred.",
   "limits": "Inventory of this snapshot, not a warranty of authorship, clearance, security or real-world accuracy.",
   "screenshot": {
     "kind": "synthetic demo screenshot",
