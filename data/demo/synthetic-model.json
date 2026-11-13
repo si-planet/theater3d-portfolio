@@ -1,0 +1,486 @@
+{
+  "schemaVersion": 1,
+  "venueId": "synthetic-portfolio-orbit-042",
+  "modelId": "synthetic-portfolio-orbit-042-model-v1",
+  "status": "synthetic_fixture",
+  "label": "완전 가상 극장 모델 · 공식 도면 아님",
+  "synthetic": true,
+  "provenance": {
+    "kind": "fully_synthetic_fixture",
+    "label": "완전 가상 포트폴리오 fixture · 실재 극장 아님",
+    "measuredVenue": false,
+    "officialAuthority": false,
+    "externalSourcesUsed": false,
+    "realVenueCoordinateReuse": false,
+    "photoOrEXIFUsed": false,
+    "sourceId": "synthetic-authored-orbit-042",
+    "physicalEffectiveDate": null
+  },
+  "unitAssumption": null,
+  "unitStatus": "explicit_authored_metres_no_source_conversion",
+  "geometry": {
+    "stageWidthM": 8.4,
+    "stageDepthM": 5.6,
+    "stageHeightM": 0.48,
+    "rowCount": 3,
+    "seatsPerRow": 6,
+    "rowSpacingM": 1.1,
+    "seatSpacingM": 0.64,
+    "firstRowDistanceM": 2.3,
+    "rowRiseM": 0.18,
+    "eyeHeightM": 1.16,
+    "stagePolygon": [
+      {
+        "x": -4.2,
+        "z": -5.6
+      },
+      {
+        "x": 4.2,
+        "z": -5.6
+      },
+      {
+        "x": 4.2,
+        "z": 0.0
+      },
+      {
+        "x": -4.2,
+        "z": 0.0
+      }
+    ],
+    "roomBoundary": [
+      {
+        "x": -4.8,
+        "z": -6.1
+      },
+      {
+        "x": 4.8,
+        "z": -6.1
+      },
+      {
+        "x": 4.8,
+        "z": 6.4
+      },
+      {
+        "x": -4.8,
+        "z": 6.4
+      }
+    ],
+    "seats": [
+      {
+        "id": "synthetic-portfolio-orbit-042-seat-r01-n01",
+        "row": 1,
+        "number": 1,
+        "rowLabel": "SYN-R1",
+        "label": "가상 SYN-R1-N1",
+        "x": -1.92,
+        "z": 2.3,
+        "floorY": 0.0,
+        "rotationDeg": 0,
+        "evidenceKind": "synthetic_assumption",
+        "officialSeatId": null
+      },
+      {
+        "id": "synthetic-portfolio-orbit-042-seat-r01-n02",
+        "row": 1,
+        "number": 2,
+        "rowLabel": "SYN-R1",
+        "label": "가상 SYN-R1-N2",
+        "x": -1.28,
+        "z": 2.3,
+        "floorY": 0.0,
+        "rotationDeg": 0,
+        "evidenceKind": "synthetic_assumption",
+        "officialSeatId": null
+      },
+      {
+        "id": "synthetic-portfolio-orbit-042-seat-r01-n03",
+        "row": 1,
+        "number": 3,
+        "rowLabel": "SYN-R1",
+        "label": "가상 SYN-R1-N3",
+        "x": -0.64,
+        "z": 2.3,
+        "floorY": 0.0,
+        "rotationDeg": 0,
+        "evidenceKind": "synthetic_assumption",
+        "officialSeatId": null
+      },
+      {
+        "id": "synthetic-portfolio-orbit-042-seat-r01-n04",
+        "row": 1,
+        "number": 4,
+        "rowLabel": "SYN-R1",
+        "label": "가상 SYN-R1-N4",
+        "x": 0.64,
+        "z": 2.3,
+        "floorY": 0.0,
+        "rotationDeg": 0,
+        "evidenceKind": "synthetic_assumption",
+        "officialSeatId": null
+      },
+      {
+        "id": "synthetic-portfolio-orbit-042-seat-r01-n05",
+        "row": 1,
+        "number": 5,
+        "rowLabel": "SYN-R1",
+        "label": "가상 SYN-R1-N5",
+        "x": 1.28,
+        "z": 2.3,
+        "floorY": 0.0,
+        "rotationDeg": 0,
+        "evidenceKind": "synthetic_assumption",
+        "officialSeatId": null
+      },
+      {
+        "id": "synthetic-portfolio-orbit-042-seat-r01-n06",
+        "row": 1,
+        "number": 6,
+        "rowLabel": "SYN-R1",
+        "label": "가상 SYN-R1-N6",
+        "x": 1.92,
+        "z": 2.3,
+        "floorY": 0.0,
+        "rotationDeg": 0,
+        "evidenceKind": "synthetic_assumption",
+        "officialSeatId": null
+      },
+      {
+        "id": "synthetic-portfolio-orbit-042-seat-r02-n01",
+        "row": 2,
+        "number": 1,
+        "rowLabel": "SYN-R2",
+        "label": "가상 SYN-R2-N1",
+        "x": -1.92,
+        "z": 3.4,
+        "floorY": 0.18,
+        "rotationDeg": 0,
+        "evidenceKind": "synthetic_assumption",
+        "officialSeatId": null
+      },
+      {
+        "id": "synthetic-portfolio-orbit-042-seat-r02-n02",
+        "row": 2,
+        "number": 2,
+        "rowLabel": "SYN-R2",
+        "label": "가상 SYN-R2-N2",
+        "x": -1.28,
+        "z": 3.4,
+        "floorY": 0.18,
+        "rotationDeg": 0,
+        "evidenceKind": "synthetic_assumption",
+        "officialSeatId": null
+      },
+      {
+        "id": "synthetic-portfolio-orbit-042-seat-r02-n03",
+        "row": 2,
+        "number": 3,
+        "rowLabel": "SYN-R2",
+        "label": "가상 SYN-R2-N3",
+        "x": -0.64,
+        "z": 3.4,
+        "floorY": 0.18,
+        "rotationDeg": 0,
+        "evidenceKind": "synthetic_assumption",
+        "officialSeatId": null
+      },
+      {
+        "id": "synthetic-portfolio-orbit-042-seat-r02-n04",
+        "row": 2,
+        "number": 4,
+        "rowLabel": "SYN-R2",
+        "label": "가상 SYN-R2-N4",
+        "x": 0.64,
+        "z": 3.4,
+        "floorY": 0.18,
+        "rotationDeg": 0,
+        "evidenceKind": "synthetic_assumption",
+        "officialSeatId": null
+      },
+      {
+        "id": "synthetic-portfolio-orbit-042-seat-r02-n05",
+        "row": 2,
+        "number": 5,
+        "rowLabel": "SYN-R2",
+        "label": "가상 SYN-R2-N5",
+        "x": 1.28,
+        "z": 3.4,
+        "floorY": 0.18,
+        "rotationDeg": 0,
+        "evidenceKind": "synthetic_assumption",
+        "officialSeatId": null
+      },
+      {
+        "id": "synthetic-portfolio-orbit-042-seat-r02-n06",
+        "row": 2,
+        "number": 6,
+        "rowLabel": "SYN-R2",
+        "label": "가상 SYN-R2-N6",
+        "x": 1.92,
+        "z": 3.4,
+        "floorY": 0.18,
+        "rotationDeg": 0,
+        "evidenceKind": "synthetic_assumption",
+        "officialSeatId": null
+      },
+      {
+        "id": "synthetic-portfolio-orbit-042-seat-r03-n01",
+        "row": 3,
+        "number": 1,
+        "rowLabel": "SYN-R3",
+        "label": "가상 SYN-R3-N1",
+        "x": -1.92,
+        "z": 4.5,
+        "floorY": 0.36,
+        "rotationDeg": 0,
+        "evidenceKind": "synthetic_assumption",
+        "officialSeatId": null
+      },
+      {
+        "id": "synthetic-portfolio-orbit-042-seat-r03-n02",
+        "row": 3,
+        "number": 2,
+        "rowLabel": "SYN-R3",
+        "label": "가상 SYN-R3-N2",
+        "x": -1.28,
+        "z": 4.5,
+        "floorY": 0.36,
+        "rotationDeg": 0,
+        "evidenceKind": "synthetic_assumption",
+        "officialSeatId": null
+      },
+      {
+        "id": "synthetic-portfolio-orbit-042-seat-r03-n03",
+        "row": 3,
+        "number": 3,
+        "rowLabel": "SYN-R3",
+        "label": "가상 SYN-R3-N3",
+        "x": -0.64,
+        "z": 4.5,
+        "floorY": 0.36,
+        "rotationDeg": 0,
+        "evidenceKind": "synthetic_assumption",
+        "officialSeatId": null
+      },
+      {
+        "id": "synthetic-portfolio-orbit-042-seat-r03-n04",
+        "row": 3,
+        "number": 4,
+        "rowLabel": "SYN-R3",
+        "label": "가상 SYN-R3-N4",
+        "x": 0.64,
+        "z": 4.5,
+        "floorY": 0.36,
+        "rotationDeg": 0,
+        "evidenceKind": "synthetic_assumption",
+        "officialSeatId": null
+      },
+      {
+        "id": "synthetic-portfolio-orbit-042-seat-r03-n05",
+        "row": 3,
+        "number": 5,
+        "rowLabel": "SYN-R3",
+        "label": "가상 SYN-R3-N5",
+        "x": 1.28,
+        "z": 4.5,
+        "floorY": 0.36,
+        "rotationDeg": 0,
+        "evidenceKind": "synthetic_assumption",
+        "officialSeatId": null
+      },
+      {
+        "id": "synthetic-portfolio-orbit-042-seat-r03-n06",
+        "row": 3,
+        "number": 6,
+        "rowLabel": "SYN-R3",
+        "label": "가상 SYN-R3-N6",
+        "x": 1.92,
+        "z": 4.5,
+        "floorY": 0.36,
+        "rotationDeg": 0,
+        "evidenceKind": "synthetic_assumption",
+        "officialSeatId": null
+      }
+    ],
+    "rowPlatforms": [
+      {
+        "id": "synthetic-portfolio-orbit-042-platform-1",
+        "row": 1,
+        "y": 0.0,
+        "zStart": 1.75,
+        "zEnd": 2.85,
+        "xMin": -2.6,
+        "xMax": 2.6,
+        "evidenceKind": "synthetic_assumption"
+      },
+      {
+        "id": "synthetic-portfolio-orbit-042-platform-2",
+        "row": 2,
+        "y": 0.18,
+        "zStart": 2.85,
+        "zEnd": 3.95,
+        "xMin": -2.6,
+        "xMax": 2.6,
+        "evidenceKind": "synthetic_assumption"
+      },
+      {
+        "id": "synthetic-portfolio-orbit-042-platform-3",
+        "row": 3,
+        "y": 0.36,
+        "zStart": 3.95,
+        "zEnd": 5.05,
+        "xMin": -2.6,
+        "xMax": 2.6,
+        "evidenceKind": "synthetic_assumption"
+      }
+    ]
+  },
+  "source": {
+    "id": "synthetic-authored-orbit-042",
+    "sourceType": "synthetic_authorship",
+    "url": null,
+    "document": null,
+    "sha256": null,
+    "documentDate": null,
+    "rawUnit": null
+  },
+  "coordinateSystem": {
+    "unit": "m",
+    "origin": "stage front centre projected to synthetic front-row floor: x0,y0,z0",
+    "x": "positive to seated viewer right when looking toward stage",
+    "y": "positive up",
+    "z": "positive toward audience; stage occupies negative z",
+    "stageFloorY": 0.48,
+    "frontRowFloorY": 0.0,
+    "seatPoint": "invented chair centre at floorY; camera eye adds declared eyeHeightM",
+    "worldGeographicRegistration": null
+  },
+  "calibration": {
+    "status": "not_applicable_synthetic",
+    "scale": null,
+    "sourceToWorldTransform": null,
+    "physicalSurveyTransform": null
+  },
+  "seatMapping": {
+    "status": "synthetic_only",
+    "officialSeatCorrespondences": [],
+    "syntheticSeatCount": 18
+  },
+  "assumptions": [
+    {
+      "id": "synthetic-stage",
+      "kind": "synthetic_assumption",
+      "description": "8.4m width,5.6m depth,0.48m raised rectangular stage invented for this fixture; no theatre source."
+    },
+    {
+      "id": "synthetic-audience",
+      "kind": "synthetic_assumption",
+      "description": "Three rows with six centres each; z=2.3+(row-1)*1.1m, floorY=(row-1)*0.18m. x list[-1.92,-1.28,-0.64,0.64,1.28,1.92]m leaves a central aisle. Explicit centres take precedence over scalar seatSpacingM."
+    },
+    {
+      "id": "synthetic-platforms",
+      "kind": "synthetic_assumption",
+      "description": "Row platforms span x±2.6m and z±0.55m around each row. Not a safety/egress design."
+    },
+    {
+      "id": "synthetic-room",
+      "kind": "synthetic_assumption",
+      "description": "Room boundary x±4.8m,z-6.1..6.4m. No ceiling or wall height supplied; renderer enclosure disabled in fixture options."
+    },
+    {
+      "id": "synthetic-figures",
+      "kind": "synthetic_assumption",
+      "description": "Two anonymous renderer mannequins with invented heights and positions. Body preset keys select existing renderer templates; no real person, biometric inference or copied reference measurements."
+    }
+  ],
+  "limitations": [
+    "No physical theatre authority, survey, photos or real seat identity.",
+    "App interpreted-plan loader requires status plan_interpreted and intentionally rejects synthetic_fixture; no app wiring or loader change.",
+    "Renderer mock-canvas checks prove input and returned projection compatibility, not visual screenshot quality.",
+    "Enclosure and auditorium barriers disabled for this fixture; no guessed ceiling height."
+  ],
+  "defaultSeat": {
+    "row": 2,
+    "number": 3
+  },
+  "stageLayout": {
+    "people": [
+      {
+        "id": "synthetic-portfolio-orbit-042-mannequin-a",
+        "name": "합성 마네킹 A",
+        "x": -1.1,
+        "z": -2.0,
+        "floorY": 0.48,
+        "heightM": 1.62,
+        "bodyPreset": "female",
+        "color": "#8eafd1",
+        "facingDeg": 12,
+        "position": "custom"
+      },
+      {
+        "id": "synthetic-portfolio-orbit-042-mannequin-b",
+        "name": "합성 마네킹 B",
+        "x": 1.1,
+        "z": -2.4,
+        "floorY": 0.48,
+        "heightM": 1.84,
+        "bodyPreset": "male",
+        "color": "#d2ac85",
+        "facingDeg": -18,
+        "position": "custom"
+      }
+    ],
+    "structures": [
+      {
+        "id": "synthetic-portfolio-orbit-042-box",
+        "name": "가상 상자",
+        "type": "box",
+        "x": 0.0,
+        "z": -4.3,
+        "floorY": 0.48,
+        "widthM": 1.6,
+        "depthM": 0.8,
+        "heightM": 0.9,
+        "rotationDeg": 0,
+        "color": "#a78fbd"
+      },
+      {
+        "id": "synthetic-portfolio-orbit-042-cylinder",
+        "name": "가상 원통",
+        "type": "cylinder",
+        "x": 2.7,
+        "z": -3.5,
+        "floorY": 0.48,
+        "diameterM": 0.65,
+        "heightM": 1.15,
+        "rotationDeg": 0,
+        "color": "#8fae9b"
+      }
+    ],
+    "selectedPersonId": "synthetic-portfolio-orbit-042-mannequin-a",
+    "selectedStructureId": null,
+    "nextPersonId": 3,
+    "nextStructureId": 3
+  },
+  "rendererOptions": {
+    "camera": {
+      "horizontalFovDeg": 68,
+      "eyeHeightM": 1.16,
+      "aimX": 0.0,
+      "aimY": 1.3,
+      "aimZ": -2.8
+    },
+    "stageEnclosure": {
+      "enabled": false,
+      "heightM": null
+    },
+    "auditoriumBarriersEnabled": false,
+    "showGrid": true
+  },
+  "unknowns": {
+    "physicalLatitude": null,
+    "physicalLongitude": null,
+    "ceilingHeightM": null,
+    "currentPhysicalCapacity": null,
+    "productionSaleableCapacity": null
+  }
+}

@@ -1,0 +1,47 @@
+{
+  "schema": "td-portfolio-rights/v1",
+  "projectMaterial": "Original TD frontend code and authored synthetic fixtures; limited portfolio review permission in LICENSE.",
+  "syntheticVenueCount": 1,
+  "syntheticSeatCount": 18,
+  "realVenueRecords": 0,
+  "thirdPartyBundledPackages": 0,
+  "thirdPartyBundledAssets": 0,
+  "referenceNotice": "THIRD_PARTY_NOTICES.md",
+  "excluded": [
+    "real theatre identifiers and production metadata",
+    "real photographs, source EXIF payloads and third-party drawings",
+    "credentials and operating service configuration",
+    "server implementation and deployment operations",
+    "repository history and prior export proofs"
+  ],
+  "aiAssistance": "User requirements and review; AI-assisted implementation and verification.",
+  "publication": "Prepared for public publication; public push and Pages deployment are not yet complete.",
+  "limits": "Inventory of this snapshot, not a warranty of authorship, clearance, security or real-world accuracy.",
+  "screenshot": {
+    "kind": "synthetic demo screenshot",
+    "basis": "Project-authored synthetic scene and example-image screenshots; no real venue or personal photograph. Capture and resize limitations are described in README and QA_REPORT.json."
+  },
+  "syntheticImage": {
+    "kind": "Locally generated Canvas illustration",
+    "inputPixels": [
+      1620,
+      1080
+    ],
+    "inputAspectRatio": "6:4",
+    "focal35Mm": 35,
+    "focalMeaning": "Authored example value, not EXIF or measured optics",
+    "displayPixels": [
+      1600,
+      1067
+    ],
+    "sourcePhotographUsed": false,
+    "alignment": "Manual comparison only; no claim of precise registration to the rendered stage."
+  },
+  "visitorFiles": {
+    "includedInRepository": false,
+    "automaticServerUpload": false,
+    "browserStorage": "Explicit browser preservation only; delete removes the selected browser copy after an in-page confirmation.",
+    "sourceFileDeletion": false,
+    "inMemoryImageAfterStoredCopyDeletion": "Retained until removed from the current list or the page is closed; other photos are not removed."
+  }
+}

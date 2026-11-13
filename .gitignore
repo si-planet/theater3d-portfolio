@@ -1,0 +1,18 @@
+# Public source only: exclude local data, dependencies and editor output.
+.DS_Store
+.env
+.env.*
+node_modules/
+__pycache__/
+*.pyc
+*.log
+*.zip
+*.db
+*.sqlite*
+*.pem
+*.key
+local-data/
+private-data/
+coverage/
+playwright-report/
+test-results/

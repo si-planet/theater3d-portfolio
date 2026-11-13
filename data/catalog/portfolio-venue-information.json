@@ -1,0 +1,19 @@
+{
+  "records": [
+    {
+      "informationRecordId": "portfolio-synthetic-042",
+      "nameAsListed": "가상 공연장 · 18석",
+      "sourceUrl": null,
+      "facts": {},
+      "sourceRefs": []
+    },
+    {
+      "informationRecordId": "portfolio-unavailable",
+      "nameAsListed": "기타 공연장 · 데모 미제공",
+      "sourceUrl": null,
+      "facts": {},
+      "sourceRefs": [],
+      "portfolioDisabled": true
+    }
+  ]
+}

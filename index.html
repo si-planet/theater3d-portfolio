@@ -1,0 +1,313 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' blob: data:; connect-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="합성 공연장 1개와 가상 18좌석으로 살펴보는 TD 좌석 시야·무대 배치 포트폴리오 데모" />
+    <meta name="referrer" content="no-referrer" />
+    <meta name="theme-color" content="#f5f6f8" />
+    <title>TD 포트폴리오 · 합성 좌석 시야</title>
+    <link rel="stylesheet" href="./styles.css" />
+    <link rel="stylesheet" href="./src/private-photo-library.css" />
+  </head>
+  <body><div style="padding:8px 20px;background:#163e4b;color:white;font:600 13px system-ui">포트폴리오 실행 데모 · 합성 극장 1개 / 가상 18좌석 · 실제 치수·사진 없음 · 실제 극장 자료 미포함 · 로컬 비교·배치 저장</div>
+    <header class="site-header">
+      <a class="brand" href="./" aria-label="theater3D 홈">
+        <span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span>
+        <span>theater<span class="brand-accent">3D</span></span>
+      </a>
+      <span class="header-divider" aria-hidden="true"></span>
+      <span id="venue-name" class="venue-name">극장 선택</span>
+      <div class="header-actions">
+        <span class="local-label"><span></span> LOCAL SAMPLE</span>
+        <button id="open-sources" class="quiet-button" type="button">자료와 근거 <span aria-hidden="true">↗</span></button>
+      </div>
+    </header>
+
+    <main>
+      <section id="private-admin-panel" aria-label="개인 자료 계정 확인" hidden inert>
+        <p class="private-account-brand">TD <span>PRIVATE WORKSPACE</span></p>
+        <h1>관리자 로그인</h1><p class="private-account-intro">등록된 계정으로 로그인하고<br>비공개 자료를 안전하게 관리하세요.</p>
+        <div id="private-account-controls"></div>
+        <div aria-hidden="true"></div>
+        <button id="private-admin-return" type="button" class="quiet-button">← 메인 화면으로</button>
+        <p class="private-account-note">같은 탭에서는 새로고침 후 계정을 다시 확인해 연결합니다. 공용 기기에서는 사용 후 로그아웃하세요.</p>
+      </section>
+      <section class="intro" aria-labelledby="page-title">
+        <div>
+          <h1 id="page-title">내 자리에서 보는 무대</h1>
+          <p class="intro-copy">무대 형상과 객석 단차를 살펴보고, 내 자리에서 보이는 인물의 크기를 확인하세요.</p>
+        </div>
+        <div class="data-notice" role="status">
+          <span class="notice-dot" aria-hidden="true"></span>
+          <div><strong id="geometry-status">공식 치수 미확인 · 가상 배치 샘플</strong><small id="geometry-description">이 화면의 치수와 좌석 배치는 실제 극장과 다를 수 있습니다.</small></div>
+        </div>
+      </section>
+
+      <p id="app-error" class="error-message" role="alert" hidden></p>
+      <details id="catalog-panel" class="catalog-panel card">
+        <summary>극장·공연·게시 사진 찾기 <span id="catalog-scope">온라인 조회</span></summary>
+        <div class="catalog-content">
+          <p id="catalog-status" class="small-note" role="status" aria-live="polite">온라인 자료 연결을 확인합니다.</p>
+          <button id="catalog-retry" class="quiet-button" type="button" hidden>다시 시도</button>
+          <div class="catalog-selectors">
+            <label>극장·과거 명칭 검색<input id="catalog-search" type="search" placeholder="극장 이름" /></label>
+            <label>극장<select id="catalog-venue" disabled><option value="">극장 선택</option></select></label>
+            <label>작품 검색<input id="catalog-work-search" type="search" placeholder="작품 이름" /></label>
+            <label>작품<select id="catalog-work" disabled><option value="">전체 작품</option></select></label>
+            <label>공연·기간<select id="catalog-run" disabled><option value="">공연 선택</option></select></label>
+            <label>당시 배치<select id="catalog-layout" disabled><option value="">배치 선택</option></select></label>
+            <label>좌석 검색<input id="catalog-seat-search" type="search" placeholder="공식 좌석 표기" /></label>
+            <label>공식 좌석<select id="catalog-seat" disabled><option value="">좌석 선택</option></select></label>
+          </div>
+          <p id="catalog-context" class="small-note"></p><p id="catalog-projection-note" class="small-note"></p>
+          <div id="catalog-photos" class="catalog-photos" aria-label="게시된 공개 표시본"></div>
+          <button id="catalog-more" class="quiet-button" type="button" hidden>사진 더 보기</button>
+          <p class="small-note">공개 표시본 조회 전용입니다. 원본 다운로드·등록·공개 전환은 제공하지 않습니다.</p>
+        </div>
+      </details>
+      <div id="private-photo-library"></div>
+      <div id="private-photo-registration"></div>
+      <details id="simulation-panel" class="catalog-panel card">
+        <summary>내 배치 저장·불러오기 <span>이 브라우저</span></summary>
+        <div class="catalog-content"><p id="simulation-context" class="small-note"></p>
+          <div class="simulation-controls"><label>배치 이름<input id="simulation-name" type="text" maxlength="100" placeholder="나의 무대 배치" /></label><button id="simulation-save" class="quiet-button" type="button">현재 배치 저장</button><label>저장한 배치<select id="simulation-select"><option value="">배치 선택</option></select></label></div>
+          <div class="simulation-actions"><button id="simulation-load" class="quiet-button" type="button">불러오기</button><button id="simulation-export" class="quiet-button" type="button">JSON 내보내기</button><button id="simulation-import" class="quiet-button" type="button">JSON 가져오기</button><button id="simulation-remove" class="text-button danger-button" type="button">선택 배치 삭제</button></div>
+          <input id="simulation-file" type="file" accept="application/json,.json" hidden />
+          <div id="simulation-confirm" hidden><p class="small-note">선택한 저장 배치를 삭제할까요? 현재 화면과 다른 저장 배치는 유지됩니다.</p><button id="simulation-confirm-remove" class="quiet-button" type="button">삭제 확인</button><button id="simulation-cancel-remove" class="quiet-button" type="button">취소</button></div>
+          <button id="simulation-reset" class="text-button danger-button" type="button">개인 배치 저장소 초기화</button><div id="simulation-reset-confirm" hidden><p class="small-note">이 브라우저의 모든 극장·배치에 저장한 개인 배치를 삭제합니다. 필요한 JSON을 먼저 내보내세요. 공식 자료·사진·렌즈 즐겨찾기는 유지됩니다.</p><button id="simulation-reset-yes" class="quiet-button" type="button">모든 저장 배치 삭제 확인</button><button id="simulation-reset-no" class="quiet-button" type="button">취소</button></div>
+          <p id="simulation-status" class="small-note" role="status" aria-live="polite"></p><p class="small-note">개인 시뮬레이션만 저장합니다. 공식 모델·게시 자료·사진 원본은 수정하거나 저장하지 않습니다.</p>
+        </div>
+      </details>
+      <section class="model-selector" aria-label="극장 모델 선택">
+        <div class="venue-model-selectors"><div><label for="venue-select">공연장</label><select id="venue-select"><option value="">극장 선택</option></select></div><div><label for="model-mode">극장 모델</label><select id="model-mode"><option value="plan">도면·좌석표 기반 모델</option><option value="demo">기능 샘플</option></select></div></div>
+        <p id="venue-load-note" class="small-note" role="status" hidden>공연장 자료를 불러오고 있습니다.</p>
+        <p id="model-mode-note">직접 구성한 합성 모델입니다. 실제 극장의 치수·좌석과 관계없습니다.</p>
+      </section>
+      <nav class="workspace-mode-bar" aria-label="작업 선택"><span>작업 모드</span><div class="segmented edit-mode-selector" role="group" aria-label="작업 모드">
+              <button class="active" data-edit-mode="view" data-workspace-mode="seat" type="button" aria-pressed="true">좌석</button>
+              <button data-workspace-mode="camera" type="button" aria-pressed="false">촬영</button>
+              <button data-edit-mode="person" data-workspace-mode="person" type="button" aria-pressed="false">인물</button>
+              <button data-edit-mode="stage" data-workspace-mode="stage" type="button" aria-pressed="false">무대</button>
+            </div></nav>
+      <div class="workspace" data-workspace-mode="seat">
+        <aside class="card seats-card" aria-labelledby="seat-panel-title">
+          <details id="seat-panel" class="workspace-panel" open><summary class="panel-summary"><h2 id="seat-panel-title">좌석 선택</h2></summary><div class="panel-content seat-panel-content">
+          <p id="seat-picker-description" class="card-description">아래 객석에서 내 자리를 선택하세요.</p>
+          <div class="seat-picker">
+            <label><span id="seat-row-label">열</span><select id="seat-row" aria-label="좌석 열 또는 구역"></select></label>
+            <label>번호<select id="seat-number" aria-label="좌석 번호"></select></label>
+          </div>
+          <div class="overview-frame"><canvas id="overview" role="img" aria-label="무대와 객석의 가상 평면도. 좌석은 위의 열과 번호로도 선택할 수 있습니다."></canvas></div>
+          <div class="map-legend"><span><i class="selected-dot"></i>선택 좌석</span><span><i class="person-dot"></i>인물</span></div>
+          <div class="selected-seat"><span>선택한 자리</span><strong id="selected-seat-label">—</strong><small id="seat-distance">무대 인물까지 거리 —</small><small id="seat-floor-note">객석 바닥 높이 —</small></div>
+          <section class="seat-photos" aria-labelledby="seat-photos-title">
+            <div class="seat-photos-heading"><h3 id="seat-photos-title">이 좌석의 사진</h3><span id="seat-photo-count">0장</span></div>
+            <p id="seat-photo-empty" class="small-note">등록한 사진 없음</p>
+            <div id="seat-photo-thumbnails" class="seat-photo-thumbnails" role="group" aria-label="선택 좌석 원본 사진"></div>
+          </section>
+          <label class="check-label audience-visibility" for="audience-fill-enabled"><input id="audience-fill-enabled" type="checkbox" checked />관객 표시</label>
+          <details id="audience-panel" class="compact-section"><summary>관객 개별·전체 편집</summary><div class="audience-editor">
+            <p id="audience-body-assumption-note" class="small-note">관객 체격은 남성·여성 참고값을 사용합니다. 앉은 치수와 좌면 높이는 모델 가정입니다.</p>
+            <div class="audience-fill-controls"><label class="field-label" for="audience-fill-preset">전체 관객 체격 참고</label><select id="audience-fill-preset"><option value="mixed" selected>남녀 혼합 참고</option><option value="male">남성 참고</option><option value="female">여성 참고</option></select><button id="audience-apply-all" class="quiet-button" type="button">전체 체격 적용</button><p class="small-note">표시를 꺼도 관객 배치와 편집 내용은 유지됩니다.</p></div>
+            <label class="field-label" for="audience-edit-row">관객을 편집할 좌석</label><div class="seat-picker audience-seat-picker"><label>열<select id="audience-edit-row" aria-label="관객 편집 좌석 열"></select></label><label>번호<select id="audience-edit-number" aria-label="관객 편집 좌석 번호"></select></label></div><output id="audience-selected-label" class="audience-selected-label" for="audience-edit-row audience-edit-number">편집 좌석 —</output>
+            <label class="field-label" for="audience-preset">선택 관객 체격</label><select id="audience-preset" aria-describedby="audience-note"><option value="male">남성 참고</option><option value="female">여성 참고</option></select><div class="audience-actions"><button id="add-audience" class="quiet-button" type="button" aria-label="선택 관객 좌석에 앉히기 또는 체격 변경">앉히기·체격 변경</button><button id="remove-audience" class="text-button danger-button" type="button" disabled>선택 관객 제거</button></div>
+            <div class="audience-summary"><span id="audience-count">관객 배치 준비 중</span></div><div class="audience-global-actions"><button id="audience-reset" class="quiet-button" type="button">전체 다시 채우기</button><button id="clear-audience" class="text-button danger-button" type="button" disabled>전체 비우기</button></div><p class="small-note audience-edit-guide">시야 화면의 앞사람을 클릭해 체격을 편집할 수 있습니다. 내 자리 이동은 위의 좌석 선택을 사용하세요.</p><p id="audience-note" class="small-note">좌석마다 관객 한 명을 배치합니다. 앉은 치수·좌면 높이는 모델 가정입니다.</p>
+          </div>
+          </details>
+          <p id="seat-layout-note" class="small-note">좌석 번호와 도면의 해석 범위를 확인하세요.</p>
+          </div></details>
+        </aside>
+
+        <section class="card view-card" aria-labelledby="view-panel-title">
+          <div class="view-heading"><div><p class="eyebrow">SEAT VIEW</p><h2 id="view-panel-title">좌석에서 보는 무대</h2></div><span id="view-seat-label" class="seat-chip">—</span></div>
+          <div class="view-toolbar">
+            <div class="view-display-controls">
+            <div class="segmented" role="group" aria-label="촬영 화면비">
+              <button data-aspect="3:2" type="button" aria-pressed="false">3:2 · 기타</button>
+              <button class="active" data-aspect="6:4" type="button" aria-pressed="true">사진 6:4</button><button data-aspect="4:6" type="button" aria-pressed="false">사진 4:6</button>
+              <button data-aspect="16:9" type="button" aria-pressed="false">영상 16:9</button>
+              <button data-aspect="9:16" type="button" aria-pressed="false">영상 9:16</button>
+            </div>
+            <label class="check-label"><input id="show-grid" type="checkbox" checked />무대 격자</label>
+            </div>
+          </div>
+          <div id="person-edit-view-controls" class="person-edit-view-controls" hidden>
+            <div class="segmented" role="group" aria-label="인물 편집 전용 시점">
+              <button data-person-edit-view="top" class="active" type="button" aria-pressed="true">위에서 · 2D</button>
+              <button data-person-edit-view="front" type="button" aria-pressed="false">정면</button>
+              <button data-person-edit-view="3d" type="button" aria-pressed="false">3D</button>
+            </div>
+            <div class="editor-camera-controls"><label for="editor-yaw">3D 회전 (°)<input id="editor-yaw" type="range" min="-180" max="180" value="28" /></label><label for="editor-elevation">3D 높이 각도 (°)<input id="editor-elevation" type="range" min="10" max="80" value="34" /></label><label for="editor-zoom">편집 확대<input id="editor-zoom" type="range" min="0.5" max="2" step="0.1" value="1" /></label></div>
+            <p class="small-note">좌석 카메라와 독립된 편집 화면입니다. 좌석 시야는 보기 모드에서 확인하세요.</p>
+          </div>
+          <div class="view-surface" id="view-surface">
+            <canvas id="seat-view" role="img" tabindex="0" aria-describedby="view-direction-note" aria-label="선택 좌석에서 보이는 가상 무대와 인물. 모든 화각에서 상하좌우로 드래그하거나 방향키로 카메라를 조준할 수 있습니다."></canvas>
+            <span id="canvas-caption" class="canvas-caption">PLAN INTERPRETATION</span>
+            <span id="canvas-focal" class="canvas-focal">35 mm</span>
+            <div id="stage-photo-preview" class="stage-photo-preview" hidden><img id="stage-photo-image" alt="선택한 원본 시야 사진 전체를 3D 모델 위에 겹쳐 표시" /><div id="stage-photo-crop-guide" class="stage-photo-crop-guide" aria-label="중앙 크롭 예시 · 원본 유지" hidden><span>중앙 크롭 예시 · 원본 유지</span></div><div class="stage-photo-toolbar"><span id="stage-photo-label">원본 사진 · 무크롭</span><label class="stage-photo-opacity-control" for="stage-photo-opacity"><span>사진 농도</span><input id="stage-photo-opacity" type="range" min="0" max="100" step="1" value="50" /><output id="stage-photo-opacity-value" for="stage-photo-opacity">50%</output></label><button id="show-model-view" class="quiet-button" type="button">사진 겹침 끄기</button></div></div>
+          </div>
+          <div class="view-surface-legend" aria-label="무대와 객석 구분"><p>녹색 바닥이 무대입니다. 그 앞의 회색 바닥은 객석·단차입니다.</p><div><span><i class="stage-key" aria-hidden="true"></i>무대 바닥</span><span><i class="floor-key" aria-hidden="true"></i>객석 바닥·단차</span><span><i class="wall-key" aria-hidden="true"></i>뒷벽 · 좌우 벽</span></div></div>
+          <div class="view-stats">
+            <div><span>가로 화각</span><strong id="fov-value">—</strong></div>
+            <div><span>선택 인물의 화면 높이</span><strong id="fill-value">—</strong></div>
+            <div><span>촬영 화면비</span><strong id="aspect-value">6:4</strong></div>
+          </div>
+          <details id="camera-direction-panel" class="compact-section camera-direction-panel"><summary>카메라 조준</summary><div class="view-direction-controls">
+            <div class="view-direction-axis"><div class="view-direction-heading"><label for="view-yaw-range">좌우 각도</label><output id="view-heading-angle" for="view-yaw-range view-yaw-number">+0.0°</output><div class="number-unit"><input id="view-yaw-number" type="number" min="-180" max="180" step="0.1" value="0" aria-label="무대 중앙을 기준으로 한 카메라 좌우 각도" /><span>°</span></div></div><input id="view-yaw-range" type="range" min="-180" max="180" step="0.1" value="0" /></div>
+            <div class="view-direction-axis"><div class="view-direction-heading"><label for="view-pitch">상하 각도</label><output id="view-pitch-label" for="view-pitch view-pitch-number">+0.0°</output><div class="number-unit"><input id="view-pitch-number" type="number" min="-85" max="85" step="0.1" value="0" aria-label="수평을 기준으로 한 카메라 상하 각도" /><span>°</span></div></div><input id="view-pitch" type="range" min="-85" max="85" step="0.1" value="0" /></div>
+            <div class="view-nudge-controls" role="group" aria-label="카메라 상하좌우 조준"><button class="quiet-button" type="button" data-view-nudge="left" aria-label="카메라 왼쪽으로 조준">← 좌</button><button class="quiet-button" type="button" data-view-nudge="right" aria-label="카메라 오른쪽으로 조준">우 →</button><button class="quiet-button" type="button" data-view-nudge="up" aria-label="카메라 위로 조준">↑ 위</button><button class="quiet-button" type="button" data-view-nudge="down" aria-label="카메라 아래로 조준">↓ 아래</button></div>
+            <div class="view-direction-actions"><button id="reset-heading" class="quiet-button" type="button">무대 중앙 보기</button><button id="aim-selected-person" class="quiet-button" type="button">선택 인물 보기</button></div>
+            <p id="view-direction-note" class="small-note">좌우 0°는 내 좌석→무대 중앙, 상하 0°는 수평입니다. 왼쪽·아래− / 오른쪽·위+. 모든 화각에서 화면을 상하좌우로 드래그하거나 ↑ ↓ ← → 키로 조준하세요. Shift+방향키는 정밀 조절입니다.</p>
+          </div>
+          </details>
+          <div class="framing-note"><span id="framing-status">도면 해석 시야 · 보정 전</span><span class="info-icon" aria-hidden="true">i</span><p id="framing-note">도면 해석값으로 계산한 근사 시야입니다. 실제 시야는 촬영위치·자세·가림에 따라 달라집니다.</p></div>
+        </section>
+
+        <div class="settings-sidebar">
+        <aside class="card settings-card" aria-labelledby="settings-title">
+          <details id="camera-panel" class="workspace-panel" open><summary class="panel-summary"><h2 id="settings-title">렌즈 · 촬영</h2></summary><div class="panel-content">
+          <div class="control-section focal-section">
+            <label class="field-label lens-choice-label" for="lens-select">카메라 렌즈 · 즐겨찾기</label>
+            <div class="lens-choice-actions"><select id="lens-select" aria-describedby="lens-current-details"><option value="full">전체 범위 · 18–400mm 환산</option><option value="custom">직접 정한 환산 범위</option></select><button id="new-favorite-lens" class="quiet-button" type="button" aria-haspopup="dialog" aria-controls="favorite-lens-dialog">추가</button><button id="edit-favorite-lens" class="quiet-button" type="button" aria-haspopup="dialog" aria-controls="favorite-lens-dialog" disabled>수정 · 삭제</button></div>
+            <div class="control-heading"><label for="focal-range">현재 35mm 환산 초점거리</label><div class="number-unit"><input id="focal-number" type="number" min="18" max="400" step="any" value="35" aria-label="카메라 35mm 환산 초점거리" /><span>mm</span></div></div>
+            <div class="lens-current-summary"><p id="lens-current-details">35mm 환산 기준 · 실제 렌즈 미설정</p><output id="lens-aperture-value" for="focal-number">최대개방 —</output></div>
+            <div class="focal-presets camera-focal-presets" role="group" aria-label="렌즈 범위 내 주요 초점거리"><button id="focal-default" data-focal-preset="24" type="button" aria-pressed="false">24 mm</button><button data-focal-preset="50" type="button" aria-pressed="false">50 mm</button><button data-focal-preset="70" type="button" aria-pressed="false">70 mm</button><button data-focal-preset="105" type="button" aria-pressed="false">105 mm</button><button data-focal-preset="200" type="button" aria-pressed="false">200 mm</button><button data-focal-preset="250" type="button" aria-pressed="false">250 mm</button><button data-focal-preset="300" type="button" aria-pressed="false">300 mm</button></div>
+            <input id="focal-range" type="range" min="18" max="400" step="any" value="35" />
+            <div id="photo-focal-strip" class="photo-focal-strip" role="group" aria-label="카메라 초점거리별 원본 사진"></div>
+            <div class="range-ends"><span id="camera-focal-min-label">18 mm · 넓게</span><span id="camera-focal-max-label">400 mm · 가깝게</span></div>
+            <p class="small-note">35mm 환산 · 대각 화각 기준입니다. 사진의 환산 초점거리로 비교하며 휴대폰 줌 숫자를 자동 변환하지 않습니다. 해당 범위의 사진이 없으면 사진을 추가하거나 사진의 환산 초점거리를 확인하세요.</p>
+            <details id="lens-settings" class="lens-settings"><summary>렌즈 · 범위 설정</summary>
+              <div class="lens-range-fields"><label for="camera-focal-min">환산 최저 (mm)<input id="camera-focal-min" type="number" min="18" max="400" step="any" value="18" /></label><label for="camera-focal-max">환산 최고 (mm)<input id="camera-focal-max" type="number" min="18" max="400" step="any" value="400" /></label></div>
+              <button id="apply-camera-focal-range" class="quiet-button" type="button">직접 정한 범위 적용</button>
+              <p id="camera-focal-error" class="error-message" role="alert" hidden></p>
+              <p class="small-note">18–400mm 안에서 정합니다. 같은 값은 단렌즈 비교에 쓸 수 있습니다. 적용하면 직접 정한 환산 범위로 전환합니다.</p>
+              <label class="field-label" for="lens-crop-factor">현재 카메라 크롭 배율</label><div class="lens-crop-controls"><select id="lens-crop-factor"><option value="1">1× · 풀프레임</option><option value="1.5">1.5×</option><option value="1.6">1.6×</option><option value="2">2×</option><option value="custom">직접 입력</option></select><input id="lens-crop-custom" type="number" min="0.1" max="10" step="any" value="1" aria-label="직접 입력한 카메라 크롭 배율" hidden /><button id="apply-lens-crop" class="quiet-button" type="button">배율 적용</button></div>
+              <p class="small-note">실제 초점거리 × 크롭 배율 = 35mm 환산 초점거리. 렌즈를 선택하면 18–400mm와 겹치는 환산 범위만 사용합니다.</p>
+              <p id="lens-aperture-note" class="small-note">최대개방 F값은 참고 정보이며 노출·심도 시뮬레이션에 반영하지 않습니다.</p><a id="lens-source-link" class="lens-source-link" href="#" target="_blank" rel="noopener noreferrer" hidden>제조사 렌즈 자료</a>
+              <p id="lens-storage-note" class="small-note">렌즈 설정·즐겨찾기를 이 브라우저에 저장합니다. 사진과 EXIF는 저장하지 않습니다.</p>
+            </details>
+            <div class="sight-view-section"><label class="check-label sight-view-toggle"><input id="sight-view-enabled" type="checkbox" aria-controls="sight-view-controls" />무대 전체 · 넓은 시야</label><div id="sight-view-controls" hidden><div class="control-heading"><label for="sight-focal-range">개인 체감 비교값</label><div class="number-unit"><input id="sight-focal-number" type="number" min="5" max="20" step="1" value="13" aria-label="넓은 시야 비교용 환산 초점거리" /><span>mm</span></div></div><div class="focal-presets sight-focal-presets" role="group" aria-label="개인 체감 비교값 선택"><button data-sight-focal-preset="8" type="button" aria-pressed="false">8 mm</button><button data-sight-focal-preset="10" type="button" aria-pressed="false">10 mm</button><button class="active" data-sight-focal-preset="13" type="button" aria-pressed="true">13 mm <span>비교 참고</span></button></div><input id="sight-focal-range" type="range" min="5" max="20" step="1" value="13" /><div id="sight-photo-focal-strip" class="photo-focal-strip" role="group" aria-label="넓은 시야 비교값별 원본 사진"></div><div class="range-ends"><span>5 mm · 더 넓게</span><span>20 mm</span></div><p class="small-note">무대 전체를 넓게 살펴보는 비교 모드입니다. 실제 인간 시야의 정확한 재현이 아니며 촬영 렌즈와 별도로 비교합니다.</p></div></div>
+            <p class="small-note focal-perception-note">넓게 담기는 범위와 인물이 커 보이는 느낌은 다릅니다. 화면 크기·보는 거리도 체감에 영향을 줍니다. 기기 렌즈·육안과의 일치 보정은 아직 없습니다.</p>
+          </div>
+          <details id="camera-details" class="compact-section"><summary>높이·벽·가림·구도 설정</summary><div class="camera-details-content">
+          <div class="control-section camera-height-section">
+            <div class="control-heading"><label for="camera-height">좌면 위 카메라 높이</label><output id="camera-height-value" for="camera-height">75 cm</output></div>
+            <input id="camera-height" type="range" min="30" max="80" step="any" value="75" aria-describedby="camera-height-note" />
+            <label class="field-label" for="camera-height-number">현재 높이 (cm)</label><input id="camera-height-number" type="number" min="30" max="80" step="any" value="75" />
+            <div class="camera-height-limits"><label for="camera-height-min">나의 최저 (cm)<input id="camera-height-min" type="number" min="0" max="150" step="any" value="30" /></label><label for="camera-height-max">나의 최고 (cm)<input id="camera-height-max" type="number" min="0" max="150" step="any" value="80" /></label></div>
+            <button id="apply-camera-height-range" class="quiet-button" type="button">높이 범위 적용</button>
+            <p id="camera-height-error" class="error-message" role="alert" hidden></p>
+            <p class="small-note">앉은 자세에서 좌면부터 렌즈까지 잽니다. 최고값은 본인 머리 높이를 넘지 않도록 입력하세요.</p>
+            <label class="field-label" for="seat-height-cm">의자 좌면 높이 (cm)</label><input id="seat-height-cm" type="number" min="0" max="100" step="0.1" value="45" />
+            <p id="camera-height-note" class="small-note">좌면 45cm + 들기 75cm = 객석 바닥에서 1.20m. 좌면 높이는 모델 가정입니다.</p>
+          </div>
+          <div class="control-section stage-wall-section"><input id="stage-walls-enabled" type="checkbox" checked hidden /><fieldset class="stage-wall-directions" aria-describedby="stage-wall-direction-note"><legend>무대 공간 벽</legend><label class="check-label" for="stage-wall-back"><input id="stage-wall-back" type="checkbox" checked />뒤</label><label class="check-label" for="stage-wall-left"><input id="stage-wall-left" type="checkbox" checked />좌</label><label class="check-label" for="stage-wall-right"><input id="stage-wall-right" type="checkbox" checked />우</label></fieldset><p id="stage-wall-direction-note" class="small-note">객석에서 무대를 바라볼 때의 좌·우입니다.</p><label class="field-label" for="stage-wall-height">벽 높이 가정 (m)</label><input id="stage-wall-height" type="number" min="0.5" max="10" step="0.1" value="3" /><p id="stage-wall-note" class="small-note">벽 위치는 무대 외곽의 도면 해석을 따르며 높이는 모델 가정입니다.</p></div>
+          <div id="auditorium-barrier-section" class="control-section auditorium-barrier-section" hidden><span class="assumption-label">관찰값 · 높이 임시 가정</span><label class="check-label" for="auditorium-barriers-enabled"><input id="auditorium-barriers-enabled" type="checkbox" checked disabled aria-describedby="auditorium-barrier-note" />객석 앞 낮은 벽 표시</label><p id="auditorium-barrier-note" class="small-note">사용자 관찰: 두께 약 30cm · 무릎 앞 약 5cm. 높이는 무대 높이 기준의 임시 가정이며 실제 높이·끊김은 미확인입니다.</p></div>
+          <div class="control-section obstruction-section">
+            <label class="toggle-row"><span>가림 요소 표시</span><input id="obstruction-enabled" type="checkbox" /><span class="toggle-track" aria-hidden="true"></span></label>
+            <p class="small-note">사용자가 설정하는 단순 가림 요소입니다.</p>
+            <div id="obstruction-fields" class="obstruction-fields" hidden>
+              <label>폭 (m)<input id="obstruction-width" type="number" min="0.1" max="8" step="0.1" value="1.5" /></label>
+              <label>높이 (m)<input id="obstruction-height" type="number" min="0.1" max="6" step="0.1" value="1.2" /></label>
+              <label>좌우 위치 (m)<input id="obstruction-x" type="number" min="-8" max="8" step="0.1" value="1" /></label>
+              <label>무대 안쪽 (m)<input id="obstruction-depth" type="number" min="0" max="10" step="0.1" value="0.5" /></label>
+            </div>
+          </div>
+          <div class="control-section framing-section">
+            <label class="field-label" for="aim-framing">조준 구도</label>
+            <select id="aim-framing"><option value="full">전신 중심</option><option value="upper">상반신 중심</option></select>
+          </div>
+          <div class="lens-estimate"><p class="eyebrow">FRAMING GUIDE</p><strong>선택 인물의 구도에 필요한 화각</strong><div><span>전신</span><b id="full-body-range">—</b></div><div><span>상반신</span><b id="upper-body-range">—</b></div><small id="lens-estimate-note">화면 높이의 70–85%를 채우는 근사 예측입니다. 가림 요소는 계산에 반영하지 않습니다.</small><small>상반신 구도는 상반신 중심으로 조준하세요. 기울기·자세에 따라 달라지는 근사값입니다.</small></div>
+          <button id="reset-view" class="quiet-button reset-button" type="button">촬영·시야 설정 초기화 <span aria-hidden="true">↺</span></button>
+          </div></details>
+          </div></details>
+        </aside>
+        <aside id="stage-object-editor" class="card stage-object-editor" aria-labelledby="layout-title" hidden>
+          <details id="object-panel" class="workspace-panel" open><summary class="panel-summary"><h2 id="layout-title">오브젝트 편집</h2></summary><div class="panel-content">
+          <p class="card-description">무대 화면에서 인물이나 구조물을 선택하고 드래그해 배치하세요.</p>
+          <div id="editor-actions" class="editor-actions" aria-label="무대 오브젝트 추가">
+            <button id="add-person" class="quiet-button" type="button">＋ 인물 추가</button>
+            <div id="editor-stage-actions" class="structure-actions" hidden><button id="add-box" class="secondary-button" type="button"><span aria-hidden="true">＋</span> 상자 추가</button><button id="add-cylinder" class="secondary-button" type="button"><span aria-hidden="true">＋</span> 원통 추가</button></div>
+          </div>
+          <h3 id="editor-selection-title" class="editor-selection-title">오브젝트 선택</h3>
+          <div id="editor-empty" class="editor-empty"><span aria-hidden="true">↖</span><p>무대 위 오브젝트를 클릭하면 위치와 크기를 편집할 수 있습니다.</p></div>
+          <div id="person-multiselect" hidden>            <fieldset class="person-multi-selection"><legend>함께 배치할 인물</legend><div id="person-selection-list"></div></fieldset>
+            <div class="person-selection-actions"><button id="select-all-people" class="quiet-button" type="button">전체 선택</button><button id="clear-person-selection" class="quiet-button" type="button">선택 해제</button></div>
+            <p id="person-selection-summary" class="small-note" role="status">0명 선택</p>
+</div><div id="person-edit-tabs" class="segmented person-edit-tabs" role="tablist" aria-label="인물 편집 범위" hidden><button id="person-arrangement-tab" data-person-panel="arrangement" role="tab" aria-controls="person-group-controls" aria-selected="false" type="button">전체배치</button><button id="person-selected-tab" data-person-panel="selected" class="active" role="tab" aria-controls="editor-person-fields" aria-selected="true" type="button">선택인물</button></div>
+          <div id="editor-person-fields" role="tabpanel" aria-labelledby="person-selected-tab" class="control-section person-section" hidden>
+            <div class="person-selection"><label class="field-label" for="person-select">편집할 인물</label><select id="person-select" aria-describedby="person-count"><option value="subject">인물 1</option></select><div class="person-actions"><button id="remove-person" class="text-button danger-button" type="button">선택 삭제</button></div><p id="person-count" class="small-note">1명 배치 · 선택한 인물을 조준합니다.</p></div>
+            <div class="control-heading"><label for="person-height">선택 인물 키</label><output id="person-height-value" for="person-height">1.75 m</output></div>
+            <label class="field-label" for="person-height-number">키 직접 입력 (m)</label><input id="person-height-number" type="number" min="1.3" max="2.1" step="0.01" value="1.75" aria-describedby="person-height-edit-note" /><p id="person-height-edit-note" class="small-note">1.30–2.10 m · 체크한 인물에 함께 적용합니다. 값이 다르면 혼합으로 표시됩니다.</p><input id="person-height" type="range" min="1.3" max="2.1" step="0.01" value="1.75" />
+            <div class="person-body-controls"><span class="assumption-label">체형 비율 가정</span><fieldset class="person-body-radios"><legend>선택 인물 체형</legend><label><input id="person-body-female" type="radio" name="person-body-choice" value="female" />여성 참고</label><label><input id="person-body-male" type="radio" name="person-body-choice" value="male" checked />남성 참고</label></fieldset><select hidden id="person-body-preset" aria-describedby="person-body-note"><option value="male">남성 참고 체형</option><option value="female">여성 참고 체형</option></select><div class="person-weight-readout"><span>참고 체중 · 추정</span><output id="person-reference-weight" for="person-height person-body-preset">—</output></div><p id="person-body-note" class="small-note">한국인 20–69세 조사 평균 BMI로 선택 키의 참고 체중을 추정합니다. 키별 실측 평균은 아니며 체형 비율은 모델 가정입니다.</p><a id="person-body-source" class="person-body-source" target="_blank" rel="noopener noreferrer" hidden>공식 인체치수 참고 자료 ↗</a></div>
+            <label class="field-label" for="person-position">선택 인물 빠른 배치</label>
+            <select id="person-position"><option value="center">중앙</option><option value="front">무대 앞</option><option value="back">무대 뒤</option><option value="left">왼쪽 · 객석 기준</option><option value="right">오른쪽 · 객석 기준</option><option value="custom">직접 입력</option></select>
+            <div class="person-coordinates"><label for="person-x">좌우 x (m)<input id="person-x" type="number" min="-20" max="20" step="0.1" value="0" /></label><label for="person-depth">무대 깊이 (m)<input id="person-depth" type="number" min="0" max="20" step="0.1" value="2.5" /></label></div>
+            <p class="small-note">좌우는 객석 기준, 깊이는 무대 앞선에서 뒤로 갈수록 커집니다.</p>
+            <label class="field-label" for="person-facing">인물이 바라보는 방향 (°)</label><input id="person-facing" type="number" min="-180" max="180" step="1" value="0" /><div class="person-facing-presets" role="group" aria-label="선택 인물이 바라보는 방향"><button class="active" data-person-facing="0" type="button" aria-pressed="true">0° · 객석</button><button data-person-facing="90" type="button" aria-pressed="false">+90° · 오른쪽</button><button data-person-facing="180" type="button" aria-pressed="false">180° · 뒤벽</button><button data-person-facing="-90" type="button" aria-pressed="false">−90° · 왼쪽</button></div><p class="small-note">인물 방향의 0°는 객석 쪽입니다. 내 시야의 0° 기준과 다릅니다.</p><output id="person-relative-facing" class="person-relative-facing">선택 인물과 내 좌석의 상대 각도 —</output>
+          </div>
+        <div id="editor-structure-fields" class="layout-content" hidden>
+          <div class="editor-structure-count"><span id="structure-count" class="layout-count">0개 배치</span></div>
+          <div class="structure-picker"><label class="field-label" for="structure-select">편집할 구조물</label><select id="structure-select" aria-describedby="structure-count" disabled><option value="">구조물 없음</option></select><button id="remove-structure" class="text-button danger-button" type="button" disabled>선택 구조물 삭제</button><p class="small-note">좌우 x의 0은 무대 중앙입니다. 음수는 객석에서 본 왼쪽, 양수는 오른쪽입니다.</p></div>
+          <div class="structure-editor"><div id="structure-empty" class="structure-empty"><span aria-hidden="true">▱</span><strong>아직 배치한 구조물이 없습니다</strong><p>상자나 원통을 추가하면 선택한 구조물의 위치·치수·회전을 조절할 수 있습니다.</p></div><div id="structure-fields" hidden><div class="structure-properties"><label class="structure-name-label" for="structure-name">구조물 이름<input id="structure-name" type="text" maxlength="60" placeholder="예: 중앙 가림 요소" /></label><label class="structure-color-label" for="structure-color">색상<input id="structure-color" type="color" value="#ba8760" /></label></div><div class="structure-measures"><div id="box-dimensions" class="shape-dimensions"><label for="structure-width">폭 (m)<input id="structure-width" type="number" min="0.1" max="30" step="0.1" value="1.5" /></label><label for="structure-depth">깊이 (m)<input id="structure-depth" type="number" min="0.1" max="30" step="0.1" value="1" /></label></div><div id="cylinder-dimensions" class="shape-dimensions" hidden><label for="structure-diameter">지름 (m)<input id="structure-diameter" type="number" min="0.1" max="30" step="0.1" value="1" /></label></div><label for="structure-height">높이 (m)<input id="structure-height" type="number" min="0.1" max="30" step="0.1" value="1.5" /></label><label for="structure-rotation">회전 (°)<input id="structure-rotation" type="number" min="-180" max="180" step="1" value="0" /></label></div><div class="structure-position"><label for="structure-x">좌우 x (m)<input id="structure-x" type="number" min="-20" max="20" step="0.1" value="0" /></label><label for="structure-distance">무대 깊이 (m)<input id="structure-distance" type="number" min="0" max="20" step="0.1" value="2" /></label><p class="small-note">깊이는 무대 중앙 앞선을 기준으로 뒤로 갈수록 커집니다.</p></div></div></div>
+        </div>
+          <div id="person-group-controls" role="tabpanel" aria-labelledby="person-arrangement-tab" class="person-group-controls" hidden><details id="person-arrangement-panel" class="compact-section" open><summary>선택한 인물 일직선 배치</summary><div class="arrangement-content">
+            <label class="field-label" for="person-line-axis">배치 방향</label><select id="person-line-axis"><option value="x">가로 일직선 · 좌우</option><option value="z">세로 일직선 · 무대 앞뒤</option><option value="diagonal">대각선 · 실제 양끝 사이</option></select>
+            <label class="field-label" for="person-arrangement-mode">간격 정하기</label><select id="person-arrangement-mode"><option value="fixed">간격 직접 입력</option><option value="endpoints" selected>동일한 간격으로 · 양끝 기준</option></select>
+            <label class="field-label" for="person-spacing-cm">인물 중심 간 간격 (cm)</label><input id="person-spacing-cm" type="number" min="0.1" step="0.1" value="100" aria-describedby="person-arrangement-note" />
+            <output id="person-arrangement-gap" class="person-arrangement-gap" for="person-arrangement-mode person-line-axis" hidden></output>
+            <button id="arrange-people" class="quiet-button" type="button" disabled>선택 인물 일직선 배치</button>
+            <p id="person-arrangement-note" class="small-note">선택 인물의 기존 공간 순서를 유지하며 현재 중심을 기준으로 줄을 만듭니다. 간격은 인물 중심 간 거리입니다. 무대 경계를 넘으면 적용하지 않습니다.</p>
+            <p id="person-arrangement-feedback" class="small-note" role="status" aria-live="polite"></p>
+          </div></details></div>
+        <p id="layout-status" class="layout-status" role="status" aria-live="polite"></p>
+        <div class="layout-note"><span class="info-icon" aria-hidden="true">i</span><p id="scene-note">인물과 구조물 배치는 현재 탭에서만 유지되며 새로고침하면 초기 배치로 돌아갑니다. 구조물은 실측 세트가 아닌 크기 비교용 간단한 형상입니다. 복잡하게 교차하는 가림은 근사로 표현합니다.</p></div>
+          </div></details>
+        </aside>
+        </div>
+
+      <section class="card model-card" aria-labelledby="model-title">
+        <div class="model-heading"><div><p class="eyebrow">STAGE & AUDITORIUM</p><h2 id="model-title">무대와 객석 구조</h2><p class="card-description">무대 외곽과 선택 좌석의 높이를 함께 살펴보세요.</p></div><div class="segmented" role="group" aria-label="극장 구조 보기"><button class="active" data-model-view="isometric" type="button" aria-pressed="true">입체 구조</button><button data-model-view="side" type="button" aria-pressed="false">단면 · 단차</button></div></div>
+        <div class="model-content"><div class="model-surface"><canvas id="model-view" role="img" aria-label="극장의 무대 외곽과 객석 단차를 보여주는 입체 구조"></canvas><span id="model-view-caption" class="canvas-caption">고정 시점 · 선택 좌석 강조</span></div><aside class="model-evidence" aria-labelledby="model-info-title"><details id="model-panel" class="workspace-panel"><summary class="panel-summary"><h3>형상·높이 근거</h3><span class="assumption-label">모델 참고</span></summary><div class="panel-content"><span id="model-evidence-kind" class="model-kind">도면 해석값</span><h3 id="model-info-title">형상과 높이의 기준</h3><dl id="model-dimensions" class="model-dimensions"></dl><p id="model-info" class="small-note"></p><p id="model-auditorium-barrier-note" class="small-note" hidden></p><p id="model-limits" class="model-limits"></p></div></details></aside></div>
+        <div class="model-legend"><span><i class="stage-key"></i>무대 외곽</span><span><i class="floor-key"></i>객석 단차</span><span id="model-auditorium-barrier-legend" hidden><i class="auditorium-barrier-key" aria-hidden="true"></i>객석 앞 낮은 벽</span><span><i class="seat-key"></i>선택 좌석</span><span id="model-grid-note">격자 1 m · 단위 해석 기준</span></div>
+      </section>
+      </div>
+
+      <section class="card photo-card" aria-labelledby="photos-title">
+        <div class="photo-heading"><div><p class="eyebrow">ORIGINAL PHOTO COMPARISON</p><h2 id="photos-title">선택한 좌석에 사진 추가</h2><p class="card-description">좌석을 먼저 선택한 뒤 사진을 등록하세요. 원본은 자르지 않고 같은 좌석의 시야와 비교합니다.</p></div><div class="photo-actions"><button id="export-photos" class="quiet-button" type="button" disabled>기록 JSON 내보내기 <span aria-hidden="true">↓</span></button><button id="add-photos" class="quiet-button file-button" type="button" hidden><span aria-hidden="true">＋</span> 선택 좌석에 사진 추가</button><button id="add-seat-photos" class="primary-button file-button" type="button" aria-describedby="seat-photo-registration-note"><span aria-hidden="true">＋</span> 선택 좌석에 사진 추가</button><input id="photo-input" class="visually-hidden" type="file" accept="image/jpeg,image/png,image/webp,image/gif" aria-label="선택 좌석에 추가할 원본 사진 선택" tabindex="-1" multiple /><input id="seat-photo-input" class="visually-hidden" type="file" accept="image/jpeg,image/png,image/webp,image/gif" aria-label="선택 좌석에 등록할 원본 사진 선택" tabindex="-1" multiple /></div></div>
+        <p id="photo-registration-status" class="photo-registration-status" role="status">사진을 등록할 좌석을 선택하세요.</p>
+        <p id="seat-photo-registration-note" class="small-note seat-photo-registration-note">사진을 추가할 좌석을 먼저 선택하세요. 사진은 선택한 공연장·모델·좌석에 연결되며 원래 파일명을 유지합니다.</p>
+        <div id="photo-errors" class="error-message" role="alert" hidden></div>
+        <details id="photo-panel" class="workspace-panel"><summary class="panel-summary"><h2>사진 비교·촬영정보</h2><span id="photo-panel-count" class="panel-badge">0장</span></summary><div class="panel-content">
+        <div id="photo-empty" class="photo-empty"><span class="photo-empty-icon" aria-hidden="true">▧</span><strong>선택한 좌석의 원본 사진을 추가하세요</strong><p>JPG · PNG · WebP · GIF / 여러 장 선택 가능</p><small>파일은 이 브라우저에서만 열며, 서버로 전송하지 않습니다.</small></div>
+        <div id="photo-content" class="photo-content" hidden>
+          <div class="photo-view-column"><div class="photo-preview"><img id="original-photo" alt="선택한 원본 좌석 시야 사진" /><p id="photo-load-error" class="photo-load-error" hidden>이 브라우저에서 미리보기를 열 수 없습니다. JPG 또는 PNG 원본을 사용해 주세요.</p><span class="photo-original-label">ORIGINAL · 무크롭</span></div><div id="photo-thumbnails" class="photo-thumbnails" role="group" aria-label="원본 사진 선택"></div></div>
+          <div class="photo-metadata"><div class="photo-meta-title"><strong id="photo-file-name">—</strong><button id="remove-photo" class="text-button" type="button">제거</button></div><p id="photo-file-details" class="small-note">—</p><p id="photo-seat-context" class="photo-seat-context" hidden></p><p id="photo-exif-status" class="photo-exif-status" role="status" aria-live="polite">원본 EXIF를 확인합니다.</p><div class="photo-fields"><label>촬영 줌 배율<input id="meta-zoom" type="number" min="0.1" step="0.1" placeholder="없으면 입력 · 예: 0.6" data-meta="zoomFactor" /></label><label>기기<input id="meta-device" type="text" placeholder="예: Galaxy S26 Ultra" data-meta="device" /></label><label>극장명<input id="meta-venue" type="text" placeholder="극장 이름" data-meta="venueName" /></label><label>좌석 표기<input id="meta-seat" type="text" maxlength="100" placeholder="예: E13 / 1열 01번" data-meta="seatLabel" /></label><label>작품명<input id="meta-production" type="text" placeholder="촬영한 공연" data-meta="production" /></label><label>촬영위치·자세<input id="meta-location" type="text" placeholder="예: 앉은 자세, 눈높이" data-meta="captureLocation" /></label><label>실제 초점거리 (mm)<input id="meta-focal" type="number" min="0.1" step="0.1" placeholder="EXIF · 없으면 입력" data-meta="focalLengthMm" /></label><label>35mm 환산 (mm)<input id="meta-focal35" type="number" min="0.1" step="0.1" placeholder="EXIF · 없으면 입력" data-meta="focalLength35Mm" /></label></div><p class="small-note photo-metadata-note">원본 EXIF의 촬영정보를 자동으로 읽습니다. 누락된 촬영정보와 작품명을 보완하세요.</p><p id="photo-labeling-note" class="small-note photo-labeling-note">파일명 구분은 선택 사항입니다. 예: 극 제목_E13 (2).jpg 또는 극 제목_1열 01번 (2).jpg. 작품명 띄어쓰기와 자동으로 붙은 괄호 번호를 사용할 수 있습니다. 층·구역이 있으면 함께 적고 어느 예매처 표기든 혼용할 수 있으며, 같은 극장·배치·층/구역·열 안에서만 1열 1번과 1열 01번을 내부 비교용으로 같게 취급합니다. 선택 좌석에 사진 추가를 사용하면 원래 파일명 그대로 등록할 수 있습니다.</p><button id="apply-photo-focal" class="secondary-button" type="button" disabled>이 사진의 환산 초점거리 적용</button></div>
+        </div>
+        <div class="photo-privacy"><span class="info-icon" aria-hidden="true">i</span><p>추가한 사진은 이 브라우저에서 처리합니다. 브라우저에 보관을 선택한 사진은 이 사이트의 로컬 저장소에 남습니다. 보관하지 않은 사진은 새로고침하면 사라집니다. JSON 내보내기는 촬영정보를 포함할 수 있습니다.</p></div>
+        </div></details>
+      </section>
+      <footer class="site-footer"><span>TD · 합성 공연장 포트폴리오</span><span>실측 시야가 아닌 합성 배치입니다.</span></footer>
+    </main>
+
+    <dialog id="photo-dialog" class="seat-photo-dialog" aria-labelledby="photo-dialog-name">
+      <div class="dialog-heading"><div><p class="eyebrow">SEAT PHOTO · ORIGINAL</p><h2 id="photo-dialog-name">좌석 사진</h2></div><button id="close-photo-dialog" class="icon-button" type="button" aria-label="원본 사진 닫기">×</button></div>
+      <div class="photo-dialog-preview"><img id="photo-dialog-image" alt="선택 좌석에서 촬영한 원본 사진 전체" /></div>
+      <div class="photo-dialog-footer"><p id="photo-dialog-note" class="small-note">원본 사진 전체를 표시합니다.</p><button id="project-seat-photo" class="primary-button" type="button">무대에 겹쳐 보기</button></div>
+    </dialog>
+
+    <dialog id="sources-dialog" aria-labelledby="sources-title"><div class="dialog-heading"><div><p class="eyebrow">EVIDENCE & LIMITS</p><h2 id="sources-title">자료와 근거</h2></div><button id="close-sources" class="icon-button" type="button" aria-label="자료 창 닫기">×</button></div><p id="source-intro" class="dialog-intro">공식 자료와 현재 샘플의 가정을 확인하세요.</p><div id="sources-list"></div><div class="dialog-limitations"><strong>사진으로 보정할 때</strong><p>줌 숫자만으로 거리를 확정하지 않습니다. 기기, 렌즈 전환, 디지털 줌, EXIF를 함께 확인합니다. 공개 프로필 키는 자세와 무대 단차의 영향을 받는 참고값이며, 사진으로 인물 신원을 추정하지 않습니다.</p><strong>극장 명칭과 구조</strong><p>이름만 변경된 극장은 명칭 이력으로 연결합니다. 무대·객석·좌석 번호가 바뀌는 구조 변화는 새 극장으로 구분하며 이전 극장과 관계를 기록합니다.</p></div></dialog>
+    <script type="module" src="./src/app.js"></script>
+    <dialog id="catalog-photo-dialog" class="seat-photo-dialog"><div class="dialog-heading"><h2 id="catalog-photo-title">공개 표시본 전체보기</h2><button id="catalog-photo-close" class="icon-button" type="button" aria-label="닫기">×</button></div><div class="photo-dialog-preview"><img id="catalog-photo-image" alt="공개 표시본의 전체 구도" /></div><p id="catalog-photo-status" class="small-note" role="status"></p><div class="photo-dialog-footer"><button id="catalog-photo-retry" class="quiet-button" type="button" hidden>이미지 다시 조회</button><button id="catalog-photo-project" class="primary-button" type="button" disabled>무대에 겹쳐 보기</button></div></dialog>
+  <dialog id="favorite-lens-dialog" class="workspace-dialog favorite-lens-dialog" aria-labelledby="favorite-lens-heading"><div class="favorite-lens-editor"><div class="dialog-heading"><h2 id="favorite-lens-heading">렌즈 추가</h2><button id="favorite-lens-close" class="quiet-button" type="button" aria-label="렌즈 편집 닫기">닫기</button></div>
+                <label class="field-label" for="favorite-lens-name">렌즈 이름<input id="favorite-lens-name" type="text" maxlength="100" placeholder="예: 나의 24–105mm" /></label>
+                <div class="favorite-lens-fields"><label for="favorite-lens-min">실제 최저 (mm)<input id="favorite-lens-min" type="number" min="0.1" max="10000" step="any" value="24" /></label><label for="favorite-lens-max">실제 최고 (mm)<input id="favorite-lens-max" type="number" min="0.1" max="10000" step="any" value="105" /></label><label for="favorite-lens-aperture-min">광각 최대개방 (F)<input id="favorite-lens-aperture-min" type="number" min="0.1" max="100" step="any" placeholder="미확인 시 비움" /></label><label for="favorite-lens-aperture-max">망원 최대개방 (F)<input id="favorite-lens-aperture-max" type="number" min="0.1" max="100" step="any" placeholder="미확인 시 비움" /></label></div>
+                <label class="field-label" for="favorite-lens-crop-factor">함께 저장할 카메라 크롭 배율<input id="favorite-lens-crop-factor" type="number" min="0.1" max="10" step="any" value="1" /></label>
+                <div class="favorite-lens-actions dialog-actions"><button id="favorite-lens-cancel" class="quiet-button" type="button">취소</button><button id="save-favorite-lens" class="quiet-button" type="button">즐겨찾기 저장</button><button id="remove-favorite-lens" class="text-button danger-button" type="button" disabled>즐겨찾기 삭제</button></div>
+                <p id="favorite-lens-error" class="error-message" role="alert" hidden></p>
+                <p class="small-note">실제 렌즈 표기를 입력하세요. 고정 조리개는 두 F값을 같게, 미확인 조리개는 둘 다 비웁니다.</p>
+              </div></dialog>
+</body>
+</html>

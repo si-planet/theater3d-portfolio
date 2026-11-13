@@ -1,0 +1,85 @@
+{
+  "schema": "td-portfolio-qa/v1",
+  "preparedOn": "2026-11-13",
+  "status": "static-and-local-chrome-checks-passed-with-iab-capture-limitation",
+  "staticAudit": {
+    "ok": true,
+    "files": 146,
+    "literalModuleImports": 233,
+    "resolvedLocalModuleEdges": 227,
+    "findings": [],
+    "gitMetadataPresent": false
+  },
+  "syntheticFixture": {
+    "passed": 187,
+    "failed": 0,
+    "scope": "Numeric renderer execution using a mock Canvas, not browser rendering."
+  },
+  "portfolioBoundaries": {
+    "passed": 24,
+    "failed": 0,
+    "scope": "One available synthetic theatre; generic disabled record; disabled historical loader; isolated persistence; relative asset paths at root and nested bases."
+  },
+  "javascriptSyntax": {
+    "files": 119,
+    "failed": 0,
+    "runtime": "Existing Node24 runtime; no packages installed"
+  },
+  "browserAcceptance": {
+    "status": "Local Chrome representative checks passed; IAB resize/capture cause unresolved.",
+    "chrome": [
+      "Synthetic seat SYN-R3/6 selection, section and full3D mode switching, page reload, one active and one disabled generic venue.",
+      "Final candidate: synthetic photo projection with aspect/focal locks; requested390x844→1440x900→full-page capture→viewport reset preserved stage and overlay without a black frame.",
+      "Browser copy saved, delete confirmation cancelled, reload restored saved copy, confirmed deletion removed only persisted copy and retained current photo. Console errors0."
+    ],
+    "inAppBrowserAfterFinalChanges": [
+      "Default SYN-R2 row, seat 3 includes one authored Canvas image; original 1620x1080, local display1600x1067, no real photograph or EXIF.",
+      "Photo displayed and projected over the stage in an ordinary viewport screenshot; aspect/focal locks enabled35mm and locked controls.",
+      "Switching to seat4 clears projection and locks; section and full3D modes expose the selected-seat description.",
+      "Camera keyboard increment35→36 updates both number and range controls.",
+      "Browser note saved, restored after reload, then deleted through the UI; no server writes.",
+      "Theatre picker has one enabled synthetic theatre and one disabled generic record.",
+      "Requested390px mobile viewport showed375px document width, no horizontal overflow; photo controls accessible."
+    ],
+    "consoleErrorsObserved": 0,
+    "limitations": [
+      "IAB screenshots previously showed a black stage and overlay after viewport changes/full-page capture. The same sequence did not reproduce in Chrome. Browser capture/compositor involvement is suspected, not a confirmed root cause; no speculative renderer change was made.",
+      "No real phone, hosted server authentication, cloud upload or live database tested by this static demo review."
+    ]
+  },
+  "securityScope": [
+    "No actual theatre datasets, real venue identifiers, personal photographs, EXIF payloads, credentials or repository history are included. Authored geometric imagery and demo screenshots are included.",
+    "Inactive client interface modules remain for existing UI compatibility; no server implementation or deployment configuration is included.",
+    "Remote service settings and admin route are disabled; query-driven loopback registration is removed.",
+    "CSP allows same-origin asset and JSON requests; browser security restrictions do not replace a service security review.",
+    "Local files opened by a visitor may be kept in browser storage only through explicit UI actions. A shared origin is not an isolation boundary.",
+    "No network capture, penetration test, real-device acceptance, or online reference reverification is claimed by the static suites."
+  ],
+  "publication": {
+    "repositoryExists": true,
+    "pushed": false,
+    "deployed": false
+  },
+  "productionComparison": {
+    "scope": "Latest reviewed operating frontend snapshot compared on2026-11-13; private datasets and server configuration excluded.",
+    "identical": [
+      "src/geometry.js",
+      "src/stage-layout.js",
+      "src/lens-config.js",
+      "src/camera-config.js",
+      "src/model-orbit-controls.js",
+      "src/photo-upload-copy-browser.js",
+      "src/photos.js",
+      "src/private-photo-library.css"
+    ],
+    "intentionalSanitization": [
+      "src/scene.js: real-venue special cases removed",
+      "src/sight-section.js: real-venue special cases removed",
+      "src/stage-wall-settings.js: real-venue identifiers removed",
+      "catalogs and settings: one synthetic venue; hosted services disabled",
+      "app and personal workspace: authored sample photo and functional browser-only notes"
+    ],
+    "portedFix": "Six native-fetch receiver calls in five inactive compatibility modules aligned; service activation remains disabled.",
+    "localPhotoDeleteUI": "bindLocalPhotoControls matches operating v5; inline confirmation, context checks and cancel handling. Only browser IndexedDB copy is affected."
+  }
+}
