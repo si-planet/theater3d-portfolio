@@ -1,7 +1,7 @@
 {
   "schema": "td-portfolio-qa/v1",
   "preparedOn": "2026-11-13",
-  "status": "static-and-local-chrome-checks-passed-with-iab-capture-limitation",
+  "status": "published-static-demo-representative-checks-passed",
   "staticAudit": {
     "ok": true,
     "files": 146,
@@ -44,7 +44,15 @@
     "consoleErrorsObserved": 0,
     "limitations": [
       "IAB screenshots previously showed a black stage and overlay after viewport changes/full-page capture. The same sequence did not reproduce in Chrome. Browser capture/compositor involvement is suspected, not a confirmed root cause; no speculative renderer change was made.",
-      "No real phone, hosted server authentication, cloud upload or live database tested by this static demo review."
+      "No real phone, hosted server authentication, cloud upload or live database tested by this static demo review.",
+      "Cold-load latency remains an improvement item; this review did not benchmark or optimize initial module loading."
+    ],
+    "publicChrome": [
+      "Actual HTTPS path loaded and reloaded; projection, aspect/focal lock, seat4 selection, section and full3D verified.",
+      "Mobile viewport then reset kept projection visible; no real phone claim.",
+      "Temporary browser note saved, restored after reload and removed through UI. No server data written.",
+      "First cold load was delayed; after initialization the expected UI and sample appeared. No measured performance budget claimed.",
+      "Console errors observed0; owned test tabs closed and open tab groups list empty."
     ]
   },
   "securityScope": [
@@ -57,8 +65,14 @@
   ],
   "publication": {
     "repositoryExists": true,
-    "pushed": false,
-    "deployed": false
+    "pushed": true,
+    "deployed": true,
+    "url": "https://si-planet.github.io/theater3d-portfolio/",
+    "initialSourceCommit": "215de217fbc75a0b904aa186b95fe3040908ce71",
+    "privateHistoryTransferred": false,
+    "remoteFileCount": 146,
+    "deployedFilesHashMatched": 12,
+    "initialPagesRun": "43402889116"
   },
   "productionComparison": {
     "scope": "Latest reviewed operating frontend snapshot compared on2026-11-13; private datasets and server configuration excluded.",
