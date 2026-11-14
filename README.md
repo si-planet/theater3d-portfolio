@@ -91,10 +91,51 @@
 | 구성 | 역할 |
 | --- | --- |
 | `data/demo/` | 독립적으로 작성한 가상 극장의 형상·좌석 데이터 |
-| `src/geometry.js`, `src/stage-layout.js` | 좌석 좌표와 인물·구조물 배치 계산 ## 공개본 구성
+| `src/geometry.js`, `src/stage-layout.js` | 좌석 좌표와 인물·구조물 배치 계산 |
+| `src/scene.js`, `src/sight-section.js` | 좌석 시점·전체 3D·단면 렌더링 |
+| `src/photos.js`, `src/photo-asset-processing.js` | 로컬 이미지와 촬영정보 처리 |
+| `src/simulation-storage.js`, `src/local-photo-store.js` | 배치·사진의 브라우저 보관 |
+| `tests/` | 합성 모델, 공개 범위와 정적 경로 검사 |
+
+극장 데이터와 화면 상태를 분리해 같은 렌더러로 다른 배치를 표현할 수 있게 했습니다. 사진은 선택한 극장·모델·좌석에 연결하므로 자리를 옮겼을 때 다른 좌석의 사진이 섞이지 않도록 구성했습니다.
+
+## 공개본 구성
 
 제품의 화면·계산 코드를 바탕으로 실제 자료와 서버 연결을 제외하고 합성 데이터로 구성했습니다. 운영 인증·DB 처리와 이 정적 데모의 브라우저 저장은 별개입니다. 공개 데모의 로컬 사진·메모·배치 조작이 운영 서버의 등록·삭제를 수행하지 않습니다.
 
+## 로컬 실행
+
+Python 3가 있다면 프로젝트 폴더에서 실행합니다. Windows에서는 `python3` 대신 `py -3`를 사용할 수 있습니다.
+
+```sh
+python3 -m http.server 8897 --bind 127.0.0.1
+```
+
+접속 주소: `http://127.0.0.1:8897/`
+
+별도 설치·빌드는 필요하지 않습니다. ES 모듈과 JSON을 읽으므로 HTML 더블클릭 대신 HTTP 서버를 사용합니다. GitHub Pages에서는 저장소 하위 경로에 그대로 게시할 수 있습니다.
+
+## 검증과 제한
+
+```sh
+python3 -B tests/audit-safe-export.py
+node tests/synthetic-fixture.mjs
+node tests/portfolio-boundaries.mjs
+node tests/photo-focal-lock.mjs
+```
+
+Node는 검사할 때만 필요합니다. 실행에는 필요하지 않습니다. 검사 결과와 실제 브라우저 확인 범위는 [QA_REPORT.json](QA_REPORT.json)에 기록합니다.
+
 검사 시점별 브라우저 확인 결과와 남은 검증 범위는 [검증 기록](VERIFICATION.md)에 분리했습니다. 데모 검사 통과를 운영 서비스 전체 기능 검증으로 해석하지 않습니다.
 
-|
+- 형상·시야·인체·카메라는 비교를 위한 근사 표현입니다. 실제 관람 시야나 좌석 품질을 보증하지 않습니다.
+- 실제 극장 데이터·사진·도면·계정·인증정보·비공개 Git 이력은 포함하지 않습니다.
+- 일부 비활성 클라이언트 모듈은 기존 화면의 의존성을 유지하기 위해 남아 있습니다. 운영 서버 연결 설정은 비활성입니다.
+- 정적 검사·모의 Canvas 수치 검사·브라우저 확인·실휴대폰 검수는 서로 다른 검증입니다.
+- 저장 키가 구분되어도 같은 호스트의 다른 사이트와 별도 보안 경계가 만들어지는 것은 아닙니다.
+
+## 이용 조건
+
+이 저장소는 **포트폴리오 열람·평가 목적**으로 공개합니다. [LICENSE](LICENSE)는 수정하지 않은 사본의 평가용 실행을 허용하며, 코드·데이터의 일반 재사용이나 재배포를 허용하는 오픈소스 라이선스가 아닙니다. GitHub에서의 열람·fork 등 플랫폼 약관상 권리는 별도로 적용됩니다. [GitHub 라이선스 안내](https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/licensing-a-repository)
+
+제3자 참고 링크와 명칭의 범위는 [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)에 정리했습니다.
